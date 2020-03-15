@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:test_app/assets/colors.dart';
 import 'package:test_app/models/news_model.dart';
 
 class NewsCarousel extends StatefulWidget {
@@ -32,7 +33,7 @@ class NewsCarouselState extends State<NewsCarousel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.5,
+      // height: MediaQuery.of(context).size.height * 0.2,
       // margin: EdgeInsets.only(top: 32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -78,13 +79,38 @@ class News extends StatelessWidget {
           child: Hero(
               tag: _news.id,
               child: GestureDetector(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NewsDetail(_news))),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.network(_news.link, fit: BoxFit.cover)))),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => NewsDetail(_news))),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Stack(fit: StackFit.expand, children: <Widget>[
+                      Image.network(_news.link, fit: BoxFit.cover),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            gradient: LinearGradient(
+                                begin: FractionalOffset.topCenter,
+                                end: FractionalOffset.bottomCenter,
+                                colors: [
+                                  Colors.white.withOpacity(0.0),
+                                  darkBlue.withOpacity(0.48),
+                                ],
+                                stops: [
+                                  0.0,
+                                  1.0
+                                ])),
+                      ),
+                      Align(
+                          alignment: Alignment(-0.6, 0.8),
+                          child: Text(
+                            _news.title,
+                            style: TextStyle(
+                                fontSize: 28,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900),
+                          )),
+                    ])),
+              )),
         );
       },
     );
@@ -98,49 +124,74 @@ class NewsDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Selected image'),
-      // ),
-      body: Stack(
-        children: <Widget>[
-          Column(
+        // appBar: AppBar(
+        //   title: Text('Selected image'),
+        // ),
+        body: Column(
+      children: <Widget>[
+        Stack(
+          children: <Widget>[
+            Hero(
+              tag: _news.id,
+              child: Container(
+                  // height: 240,
+                  height: MediaQuery.of(context).size.height * 0.35,
+                  width: MediaQuery.of(context).size.width,
+                  child: FittedBox(
+                    child: Image.network(
+                      _news.link,
+                    ),
+                    fit: BoxFit.fill,
+                  )),
+            ),
+            Positioned(
+                top: 200,
+                left: 48,
+                child: Text(
+                  _news.title,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w900),
+                )),
+          ],
+        ),
+        SizedBox(
+          height: 32,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
             children: <Widget>[
-              Hero(
-                tag: _news.id,
-                child: Container(
-                    // height: 240,
-                    height: MediaQuery.of(context).size.height * 0.35,
-                    width: MediaQuery.of(context).size.width,
-                    child: FittedBox(
-                      child: Image.network(
-                        _news.link,
-                      ),
-                      fit: BoxFit.fill,
-                    )),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      _news.author,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    Text(
+                      _news.postDate,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    )
+                  ],
+                ),
               ),
               SizedBox(
-                height: 32,
+                height: 24,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(_news.article),
-              )
+              Text(
+                _news.article,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
             ],
           ),
-          Positioned(
-              top: 200,
-              left: 48,
-              child: Hero(
-                  tag: "tes",
-                  child: Text(
-                    "The Milky Way ",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w900),
-                  ))),
-        ],
-      ),
-    );
+        ),
+      ],
+    ));
   }
 }

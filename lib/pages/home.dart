@@ -10,6 +10,7 @@ class Home extends StatelessWidget {
 //       theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: Colors.white),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.white,
@@ -24,11 +25,11 @@ class Home extends StatelessWidget {
                     Container(
                       margin: EdgeInsets.only(top: 18, left: 4),
                       height: 10,
-                      width: 100,
+                      width: 132,
                       color: shadeBlue,
                     ),
                     Text(
-                      'Hot News',
+                      'Unique Facts',
                       style: TextStyle(
                           fontSize: 28,
                           color: darkBlue,
@@ -40,9 +41,41 @@ class Home extends StatelessWidget {
                 //   height: 32,
                 // ),
                 NewsCarousel(),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+                  child: Stack(children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(top: 18, left: 4),
+                      height: 10,
+                      width: 132,
+                      color: shadeBlue,
+                    ),
+                    Text(
+                      'Arround You',
+                      style: TextStyle(
+                          fontSize: 28,
+                          color: darkBlue,
+                          fontWeight: FontWeight.w900),
+                    ),
+                  ]),
+                ),
+                Container(
+                  // margin: EdgeInsets.symmetric(vertical: 20.0),
+                  height: 320.0,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      ObjCard(),
+                      ObjCard(),
+                      ObjCard(),
+                      ObjCard(),
+                      ObjCard(),
+                      ObjCard(),
+                    ],
+                  ),
+                ),
               ],
             )));
   }
 }
-
-
