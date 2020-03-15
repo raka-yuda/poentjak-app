@@ -21,7 +21,7 @@ class CustomAppBar extends StatelessWidget {
             width: 36.0,
             height: 36.0,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(32),
+              borderRadius: BorderRadius.circular(12),
               child: Image.network(
                 "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
                 fit: BoxFit.cover,
@@ -33,20 +33,23 @@ class CustomAppBar extends StatelessWidget {
             height: 36,
             width: 128,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(36),
+              borderRadius: BorderRadius.circular(12),
               color: Color(0xFFEAE9F3),
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Icon(
                     Icons.gps_fixed,
                     size: 18,
                   ),
-                  Text("Jakarta")
+                  Text(
+                    "Jakarta",
+                    style: TextStyle(fontSize: 18),
+                  )
                 ],
               ),
             ),
@@ -60,105 +63,89 @@ class CustomAppBar extends StatelessWidget {
 class CardMount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-        borderRadius: BorderRadius.circular(10.0),
-        child: Stack(fit: StackFit.expand, children: <Widget>[
-          Image.network(
-              "https://images.pexels.com/photos/1169754/pexels-photo-1169754.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-              fit: BoxFit.cover),
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                gradient: LinearGradient(
-                    begin: FractionalOffset.topCenter,
-                    end: FractionalOffset.bottomCenter,
-                    colors: [
-                      Colors.white.withOpacity(0.0),
-                      darkBlue.withOpacity(0.48),
-                    ],
-                    stops: [
-                      0.0,
-                      1.0
-                    ])),
-          ),
-          Align(
-              alignment: Alignment(-0.6, 0.8),
-              child: Text(
-                "Title",
-                style: TextStyle(
-                    fontSize: 28,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900),
-              )),
-        ]));
-  }
-}
-
-class ObjCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Padding(
             padding: EdgeInsets.fromLTRB(20, 0, 10, 20),
-            child: Container(
-              width: 320,
-              height: 280.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                image: DecorationImage(
-                  image: NetworkImage(
-                      'https://images.pexels.com/photos/1024359/pexels-photo-1024359.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Padding(
-                  padding: EdgeInsets.fromLTRB(20, 160, 20, 20),
-                  child: Container(
-                      width: double.maxFinite,
-//                     height: 50.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                          color: Colors.white),
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.56,
+                    height: MediaQuery.of(context).size.height * 0.36,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            'https://images.pexels.com/photos/3380999/pexels-photo-3380999.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.all(5),
-                              child: Text(
-                                'Cafetaria',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(2.5),
-                              child: Text(
-                                'Jl. Kenangan , Ancol - North Jakarta',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black26,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(2.5),
-                              child: Text(
-                                '300.0 Miles',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
-                            ),
+                            Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 16),
+                                width: double.maxFinite,
+//                     height: 50.0,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5.0)),
+                                    color: shadeBlue.withOpacity(0.84)),
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Text(
+                                          'Fuji Mount',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w900,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(2.5),
+                                        child: Text(
+                                          'Japan',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white54,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(2.5),
+                                        child: Text(
+                                          '300.0 Miles',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ))
                           ],
                         ),
-                      ))),
+                        Positioned.fill(
+                            child: new Material(
+                                color: Colors.transparent,
+                                child: new InkWell(
+                                  borderRadius: BorderRadius.circular(12),
+                                  onTap: () => null,
+                                )))
+                      ],
+                    ))
+              ],
             )),
       ],
     );

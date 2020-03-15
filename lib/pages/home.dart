@@ -63,15 +63,14 @@ class Home extends StatelessWidget {
                 Container(
                   // margin: EdgeInsets.symmetric(vertical: 20.0),
                   height: 320.0,
+                  alignment: Alignment.center,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: <Widget>[
-                      ObjCard(),
-                      ObjCard(),
-                      ObjCard(),
-                      ObjCard(),
-                      ObjCard(),
-                      ObjCard(),
+                      CardMount(),
+                      CardMount(),
+                      CardMount(),
+                      CardMount()
                     ],
                   ),
                 ),
