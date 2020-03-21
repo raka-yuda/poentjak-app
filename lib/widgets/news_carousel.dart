@@ -77,7 +77,7 @@ class News extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           margin: EdgeInsets.symmetric(horizontal: 10.0),
           child: Hero(
-              tag: _news.id,
+              tag: "news_" * _news.id,
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                   child: Stack(fit: StackFit.expand, children: <Widget>[
@@ -139,7 +139,7 @@ class NewsDetail extends StatelessWidget {
         body: Column(
       children: <Widget>[
         Hero(
-            tag: _news.id,
+            tag: "news_" * _news.id,
             child: Stack(
               children: <Widget>[
                 Container(

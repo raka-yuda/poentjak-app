@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test_app/widgets/main_widget.dart';
 import 'package:test_app/widgets/news_carousel.dart';
 import '../assets/colors.dart';
+import '../models/mount_model.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -61,20 +62,24 @@ class Home extends StatelessWidget {
                   ]),
                 ),
                 Container(
-                  // margin: EdgeInsets.symmetric(vertical: 20.0),
-                  height: 320.0,
-                  alignment: Alignment.center,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      CardMount(),
-                      CardMount(),
-                      CardMount(),
-                      CardMount()
-                    ],
-                  ),
-                ),
+                    // margin: EdgeInsets.symmetric(vertical: 20.0),
+                    height: 320.0,
+                    alignment: Alignment.center,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: mountList.length,
+                        itemBuilder: (context, index) {
+                          return CardMount(mountList[index]);
+                        })),
               ],
-            )));
+            ))
+        //     Scaffold(
+        //   body: Center(
+        //     child: CardMount(),
+        //   ),
+        // )
+
+        // HeroTest()
+        );
   }
 }
