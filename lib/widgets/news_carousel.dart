@@ -2,6 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:test_app/assets/colors.dart';
 import 'package:test_app/models/news_model.dart';
+import 'package:test_app/models/article_model.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class NewsCarousel extends StatefulWidget {
   NewsCarousel() : super();
@@ -33,33 +37,34 @@ class NewsCarouselState extends State<NewsCarousel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: MediaQuery.of(context).size.height * 0.2,
-      // margin: EdgeInsets.only(top: 32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          carouselSlider = CarouselSlider(
-            height: MediaQuery.of(context).size.height * 0.2,
-            initialPage: 0,
-            enlargeCenterPage: true,
-            autoPlay: true,
-            reverse: false,
-            enableInfiniteScroll: true,
-            autoPlayInterval: Duration(seconds: 2),
-            autoPlayAnimationDuration: Duration(milliseconds: 2000),
-            pauseAutoPlayOnTouch: Duration(seconds: 10),
-            scrollDirection: Axis.horizontal,
-            onPageChanged: (index) {
-              setState(() {
-                _current = index;
-              });
-            },
-            items: newslist.map((news) => News(news)).toList(),
-          ),
-        ],
-      ),
-    );
+        height: MediaQuery.of(context).size.height * 0.2,
+        // margin: EdgeInsets.only(top: 32),
+        child:
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                carouselSlider = CarouselSlider(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  initialPage: 0,
+                  enlargeCenterPage: true,
+                  autoPlay: true,
+                  reverse: false,
+                  enableInfiniteScroll: true,
+                  autoPlayInterval: Duration(seconds: 2),
+                  autoPlayAnimationDuration: Duration(milliseconds: 2000),
+                  pauseAutoPlayOnTouch: Duration(seconds: 10),
+                  scrollDirection: Axis.horizontal,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _current = index;
+                    });
+                  },
+                  items: newslist.map((news) => News(news)).toList(),
+                ),
+              ],
+            ),
+            Article());
   }
 }
 
@@ -121,6 +126,116 @@ class News extends StatelessWidget {
                             )))
                   ]))),
         );
+      },
+    );
+  }
+}
+
+// class Article extends StatelessWidget {
+//   final ArticleModel _article;
+
+//   Article(this._article);
+
+//   Future<ArticleModel> getArticle() async {
+//     String url = 'http://192.168.5.189:3000/api/blog/';
+//     final response =
+//         await http.get(url, headers: {"Accept": "application/json"});
+
+//     if (response.statusCode == 200) {
+//       return ArticleModel.fromJson(json.decode(response.body));
+//     } else {
+//       throw Exception('Failed to load post');
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return FutureBuilder<ArticleModel>(
+//       future: getArticle(), //sets the getQuote method as the expected Future
+//       builder: (context, snapshot) {
+//         if (snapshot.hasData) {
+//           //checks if the response returns valid data
+//           return Center(
+//             child: Column(
+//               children: <Widget>[
+//                 Text(snapshot.data.id.toString()), //displays the quote
+//                 SizedBox(
+//                   height: 10.0,
+//                 ),
+//                 Text(
+//                     " - ${snapshot.data.titleArticle}"), //displays the quote's author
+//               ],
+//             ),
+//           );
+//         } else if (snapshot.hasError) {
+//           //checks if the response throws an error
+//           return Text("${snapshot.error}");
+//         }
+//         return CircularProgressIndicator();
+//       },
+//     );
+//   }
+// }
+
+class Article extends StatefulWidget {
+  @override
+  _ArticleState createState() => _ArticleState();
+}
+
+class _ArticleState extends State<Article> {
+  Future<List<ArticleModel>> _getArticles() async {
+    var data = await http.get("http://192.168.5.189:3000/api/blog/");
+
+    var jsonData = json.decode(data.body);
+
+    List<ArticleModel> articles = [];
+
+    for (var u in jsonData) {
+      // User user = User(u["index"], u["about"], u["name"], u["email"], u["picture"]);
+      ArticleModel article = ArticleModel(
+          id: u["id"],
+          titleArticle: u["title_article"],
+          article: u["article"],
+          imgArticle: u["img_article"],
+          postDate: u["post_date"],
+          nameAuthor: u["name_author"],
+          imgAuthor: u["img_author"]);
+      articles.add(article);
+    }
+
+    print(articles.length);
+
+    return articles;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _getArticles(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        print(snapshot.data);
+        if (snapshot.data == null) {
+          return Container(child: Center(child: Text("Loading...")));
+        } else {
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage:
+                      NetworkImage(snapshot.data[index].imgArticle),
+                ),
+                title: Text(snapshot.data[index].nameAuthor),
+                subtitle: Text(snapshot.data[index].titleArticle),
+                onTap: () {
+                  // Navigator.push(context,
+                  //   new MaterialPageRoute(builder: (context) => DetailPage(snapshot.data[index]))
+                  // );
+                },
+              );
+            },
+          );
+        }
       },
     );
   }
