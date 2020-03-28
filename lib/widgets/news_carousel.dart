@@ -1,11 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:test_app/api/api_services.dart';
 import 'package:test_app/assets/colors.dart';
-import 'package:test_app/models/news_model.dart';
-import 'package:test_app/models/article_model.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:test_app/models/article.dart';
 
 class NewsCarousel extends StatefulWidget {
   NewsCarousel() : super();
@@ -20,58 +17,59 @@ class NewsCarouselState extends State<NewsCarousel> {
   //
   CarouselSlider carouselSlider;
   int _current = 0;
-  // List imgList = [
-  //   "https://images.pexels.com/photos/1169754/pexels-photo-1169754.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  //   "https://images.pexels.com/photos/2538107/pexels-photo-2538107.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  //   "https://images.pexels.com/photos/912469/pexels-photo-912469.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-  // ];
+  ApiService apiService;
 
-  List<T> map<T>(List list, Function handler) {
-    List<T> result = [];
-    for (var i = 0; i < list.length; i++) {
-      result.add(handler(i, list[i]));
-    }
-    return result;
+  void initState() {
+    super.initState();
+    apiService = ApiService();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: MediaQuery.of(context).size.height * 0.2,
-        // margin: EdgeInsets.only(top: 32),
-        child:
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                carouselSlider = CarouselSlider(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  initialPage: 0,
-                  enlargeCenterPage: true,
-                  autoPlay: true,
-                  reverse: false,
-                  enableInfiniteScroll: true,
-                  autoPlayInterval: Duration(seconds: 2),
-                  autoPlayAnimationDuration: Duration(milliseconds: 2000),
-                  pauseAutoPlayOnTouch: Duration(seconds: 10),
-                  scrollDirection: Axis.horizontal,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _current = index;
-                    });
-                  },
-                  items: newslist.map((news) => News(news)).toList(),
-                ),
-              ],
-            ),
-            Article());
+      height: MediaQuery.of(context).size.height * 0.2,
+      // margin: EdgeInsets.only(top: 32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          FutureBuilder<List<Article>>(
+              future: apiService.getArticles(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return carouselSlider = CarouselSlider(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    initialPage: 0,
+                    enlargeCenterPage: true,
+                    autoPlay: true,
+                    reverse: false,
+                    enableInfiniteScroll: true,
+                    autoPlayInterval: Duration(seconds: 2),
+                    autoPlayAnimationDuration: Duration(milliseconds: 2000),
+                    pauseAutoPlayOnTouch: Duration(seconds: 10),
+                    scrollDirection: Axis.horizontal,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _current = index;
+                      });
+                    },
+                    items:
+                        snapshot.data.map((article) => News(article)).toList(),
+                  );
+                }
+                return CircularProgressIndicator();
+              }),
+        ],
+      ),
+      // Article()
+    );
   }
 }
 
 class News extends StatelessWidget {
-  final NewsModel _news;
+  final Article _article;
 
-  News(this._news);
+  News(this._article);
 
   @override
   Widget build(BuildContext context) {
@@ -82,11 +80,11 @@ class News extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           margin: EdgeInsets.symmetric(horizontal: 10.0),
           child: Hero(
-              tag: "news_" * _news.id,
+              tag: "article_" * _article.id,
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                   child: Stack(fit: StackFit.expand, children: <Widget>[
-                    Image.network(_news.link, fit: BoxFit.cover),
+                    Image.network(_article.imgArticle, fit: BoxFit.cover),
                     Container(
                       decoration: BoxDecoration(
                           // color: Colors.white,
@@ -107,7 +105,7 @@ class News extends StatelessWidget {
                         child: Material(
                           color: Colors.transparent,
                           child: Text(
-                            _news.title,
+                            _article.titleArticle,
                             style: TextStyle(
                                 fontSize: 24,
                                 color: Colors.white,
@@ -122,7 +120,8 @@ class News extends StatelessWidget {
                               onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => NewsDetail(_news))),
+                                      builder: (context) =>
+                                          NewsDetail(_article))),
                             )))
                   ]))),
         );
@@ -131,120 +130,10 @@ class News extends StatelessWidget {
   }
 }
 
-// class Article extends StatelessWidget {
-//   final ArticleModel _article;
-
-//   Article(this._article);
-
-//   Future<ArticleModel> getArticle() async {
-//     String url = 'http://192.168.5.189:3000/api/blog/';
-//     final response =
-//         await http.get(url, headers: {"Accept": "application/json"});
-
-//     if (response.statusCode == 200) {
-//       return ArticleModel.fromJson(json.decode(response.body));
-//     } else {
-//       throw Exception('Failed to load post');
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return FutureBuilder<ArticleModel>(
-//       future: getArticle(), //sets the getQuote method as the expected Future
-//       builder: (context, snapshot) {
-//         if (snapshot.hasData) {
-//           //checks if the response returns valid data
-//           return Center(
-//             child: Column(
-//               children: <Widget>[
-//                 Text(snapshot.data.id.toString()), //displays the quote
-//                 SizedBox(
-//                   height: 10.0,
-//                 ),
-//                 Text(
-//                     " - ${snapshot.data.titleArticle}"), //displays the quote's author
-//               ],
-//             ),
-//           );
-//         } else if (snapshot.hasError) {
-//           //checks if the response throws an error
-//           return Text("${snapshot.error}");
-//         }
-//         return CircularProgressIndicator();
-//       },
-//     );
-//   }
-// }
-
-class Article extends StatefulWidget {
-  @override
-  _ArticleState createState() => _ArticleState();
-}
-
-class _ArticleState extends State<Article> {
-  Future<List<ArticleModel>> _getArticles() async {
-    var data = await http.get("http://192.168.5.189:3000/api/blog/");
-
-    var jsonData = json.decode(data.body);
-
-    List<ArticleModel> articles = [];
-
-    for (var u in jsonData) {
-      // User user = User(u["index"], u["about"], u["name"], u["email"], u["picture"]);
-      ArticleModel article = ArticleModel(
-          id: u["id"],
-          titleArticle: u["title_article"],
-          article: u["article"],
-          imgArticle: u["img_article"],
-          postDate: u["post_date"],
-          nameAuthor: u["name_author"],
-          imgAuthor: u["img_author"]);
-      articles.add(article);
-    }
-
-    print(articles.length);
-
-    return articles;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _getArticles(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        print(snapshot.data);
-        if (snapshot.data == null) {
-          return Container(child: Center(child: Text("Loading...")));
-        } else {
-          return ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundImage:
-                      NetworkImage(snapshot.data[index].imgArticle),
-                ),
-                title: Text(snapshot.data[index].nameAuthor),
-                subtitle: Text(snapshot.data[index].titleArticle),
-                onTap: () {
-                  // Navigator.push(context,
-                  //   new MaterialPageRoute(builder: (context) => DetailPage(snapshot.data[index]))
-                  // );
-                },
-              );
-            },
-          );
-        }
-      },
-    );
-  }
-}
-
 class NewsDetail extends StatelessWidget {
-  final NewsModel _news;
+  final Article _article;
 
-  NewsDetail(this._news);
+  NewsDetail(this._article);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -254,7 +143,7 @@ class NewsDetail extends StatelessWidget {
         body: Column(
       children: <Widget>[
         Hero(
-            tag: "news_" * _news.id,
+            tag: "article_" * _article.id,
             child: Stack(
               children: <Widget>[
                 Container(
@@ -263,7 +152,7 @@ class NewsDetail extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: FittedBox(
                       child: Image.network(
-                        _news.link,
+                        _article.imgArticle,
                       ),
                       fit: BoxFit.fill,
                     )),
@@ -273,7 +162,7 @@ class NewsDetail extends StatelessWidget {
                     child: Material(
                       color: Colors.transparent,
                       child: Text(
-                        _news.title,
+                        _article.titleArticle,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 32,
@@ -301,7 +190,7 @@ class NewsDetail extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: Image.network(
-                            _news.imgAuthor,
+                            _article.imgAuthor,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -310,14 +199,14 @@ class NewsDetail extends StatelessWidget {
                         width: 16,
                       ),
                       Text(
-                        _news.author,
+                        _article.nameAuthor,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
                   Text(
-                    _news.postDate,
+                    _article.postDate,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   )
                 ],
@@ -326,7 +215,7 @@ class NewsDetail extends StatelessWidget {
                 height: 24,
               ),
               Text(
-                _news.article,
+                _article.article,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
             ],
