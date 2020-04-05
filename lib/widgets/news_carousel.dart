@@ -57,7 +57,12 @@ class NewsCarouselState extends State<NewsCarousel> {
                         snapshot.data.map((article) => News(article)).toList(),
                   );
                 }
-                return CircularProgressIndicator();
+                return Container(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
               }),
         ],
       ),
@@ -154,7 +159,7 @@ class NewsDetail extends StatelessWidget {
                       child: Image.network(
                         _article.imgArticle,
                       ),
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                     )),
                 Positioned(
                     top: 200,
@@ -190,7 +195,7 @@ class NewsDetail extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: Image.network(
-                            _article.imgAuthor,
+                            _article.author.imgAuthor,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -199,7 +204,7 @@ class NewsDetail extends StatelessWidget {
                         width: 16,
                       ),
                       Text(
-                        _article.nameAuthor,
+                        _article.author.nameAuthor,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                       ),
