@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:test_app/assets/colors.dart';
 import '../assets/images.dart';
 import '../models/mount_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 
 class CustomAppBar extends StatelessWidget {
   @override
@@ -248,10 +250,36 @@ class CardMountDetail extends StatelessWidget {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.yellowAccent,
-                                )
+                                GestureDetector(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MapScreen())),
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.white.withOpacity(0.8),
+                                          offset: Offset(-6.0, -6.0),
+                                          blurRadius: 16.0,
+                                        ),
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          offset: Offset(6.0, 6.0),
+                                          blurRadius: 16.0,
+                                        ),
+                                      ],
+                                      color: Color(0xFFEFEEEE),
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                    child: Center(
+                                      child: Icon(Icons.gps_fixed),
+                                    ),
+                                  ),
+                                ),
                               ],
                             )
                           ],
@@ -322,6 +350,24 @@ class CardMountDetail extends StatelessWidget {
             )),
       ],
     ));
+  }
+}
+
+class MapScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Google Maps Flutter'),
+      ),
+      body: GoogleMap(
+        mapType: MapType.normal,
+        initialCameraPosition: CameraPosition(
+          target: LatLng(3.595196, 98.672226),
+          zoom: 14.0,
+        ),
+      ),
+    );
   }
 }
 
