@@ -4,7 +4,6 @@ import '../assets/images.dart';
 import '../models/mount_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-
 class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -254,8 +253,7 @@ class CardMountDetail extends StatelessWidget {
                                   onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              MapScreen())),
+                                          builder: (context) => MapScreen())),
                                   child: Container(
                                     width: 50,
                                     height: 50,
@@ -353,7 +351,27 @@ class CardMountDetail extends StatelessWidget {
   }
 }
 
-class MapScreen extends StatelessWidget {
+class MapScreen extends StatefulWidget {
+  @override
+  _MapScreenState createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  final Set<Marker> _markers = {};
+  final LatLng _currentPosition = LatLng(3.595196, 98.672226);
+
+  @override
+  void initState() {
+    _markers.add(
+      Marker(
+        markerId: MarkerId("3.595196, 98.672226"),
+        position: _currentPosition,
+        icon: BitmapDescriptor.defaultMarker,
+      ),
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -363,60 +381,11 @@ class MapScreen extends StatelessWidget {
       body: GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition: CameraPosition(
-          target: LatLng(3.595196, 98.672226),
+          target: _currentPosition,
           zoom: 14.0,
         ),
+        markers: _markers,
       ),
     );
-  }
-}
-
-class HeroTest extends StatefulWidget {
-  @override
-  _HeroTestState createState() => _HeroTestState();
-}
-
-class _HeroTestState extends State<HeroTest> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Hero(
-            tag: 'hero',
-            child: GestureDetector(
-              onTap: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HeroTestDetail())),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100.0),
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    color: Colors.blueAccent,
-                    child: Center(
-                        child: Icon(
-                      Icons.group,
-                      size: 50,
-                    )),
-                  )),
-            )));
-  }
-}
-
-class HeroTestDetail extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Hero(
-        tag: 'hero',
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(100.0),
-            child: Container(
-              width: 100,
-              height: 100,
-              color: Colors.blueAccent,
-              child: Center(
-                  child: Icon(
-                Icons.group,
-                size: 50,
-              )),
-            )));
   }
 }
