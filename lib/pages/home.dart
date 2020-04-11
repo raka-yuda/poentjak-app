@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/widgets/main_widget.dart';
-import 'package:test_app/widgets/news_carousel.dart';
+import 'package:test_app/widgets/article_widget.dart';
 import '../assets/colors.dart';
 import '../models/mount_model.dart';
 
@@ -38,7 +38,7 @@ class Home extends StatelessWidget {
                     ),
                   ]),
                 ),
-                NewsCarousel(),
+                ArticleCarousel(),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 32, vertical: 24),

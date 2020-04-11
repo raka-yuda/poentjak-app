@@ -4,16 +4,16 @@ import 'package:test_app/api/api_services.dart';
 import 'package:test_app/assets/colors.dart';
 import 'package:test_app/models/article.dart';
 
-class NewsCarousel extends StatefulWidget {
-  NewsCarousel() : super();
+class ArticleCarousel extends StatefulWidget {
+  ArticleCarousel() : super();
 
   final String title = "Carousel Demo";
 
   @override
-  NewsCarouselState createState() => NewsCarouselState();
+  ArticleCarouselState createState() => ArticleCarouselState();
 }
 
-class NewsCarouselState extends State<NewsCarousel> {
+class ArticleCarouselState extends State<ArticleCarousel> {
   //
   CarouselSlider carouselSlider;
   int _current = 0;
@@ -34,36 +34,36 @@ class NewsCarouselState extends State<NewsCarousel> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           FutureBuilder<List<Article>>(
-              future: apiService.getArticles(),
+              // future: apiService.getArticles(),
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return carouselSlider = CarouselSlider(
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    initialPage: 0,
-                    enlargeCenterPage: true,
-                    autoPlay: true,
-                    reverse: false,
-                    enableInfiniteScroll: true,
-                    autoPlayInterval: Duration(seconds: 2),
-                    autoPlayAnimationDuration: Duration(milliseconds: 2000),
-                    pauseAutoPlayOnTouch: Duration(seconds: 10),
-                    scrollDirection: Axis.horizontal,
-                    onPageChanged: (index) {
-                      setState(() {
-                        _current = index;
-                      });
-                    },
-                    items:
-                        snapshot.data.map((article) => News(article)).toList(),
-                  );
-                }
-                return Container(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }),
+            // if (snapshot.hasData) {
+            //   return carouselSlider = CarouselSlider(
+            //     height: MediaQuery.of(context).size.height * 0.2,
+            //     initialPage: 0,
+            //     enlargeCenterPage: true,
+            //     autoPlay: true,
+            //     reverse: false,
+            //     enableInfiniteScroll: true,
+            //     autoPlayInterval: Duration(seconds: 2),
+            //     autoPlayAnimationDuration: Duration(milliseconds: 2000),
+            //     pauseAutoPlayOnTouch: Duration(seconds: 10),
+            //     scrollDirection: Axis.horizontal,
+            //     onPageChanged: (index) {
+            //       setState(() {
+            //         _current = index;
+            //       });
+            //     },
+            //     items:
+            //         snapshot.data.map((article) => ArticleWidget(article)).toList(),
+            //   );
+            // }
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.2,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }),
         ],
       ),
       // Article()
@@ -71,10 +71,10 @@ class NewsCarouselState extends State<NewsCarousel> {
   }
 }
 
-class News extends StatelessWidget {
+class ArticleWidget extends StatelessWidget {
   final Article _article;
 
-  News(this._article);
+  ArticleWidget(this._article);
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +126,7 @@ class News extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          NewsDetail(_article))),
+                                          ArticleWidgetDetail(_article))),
                             )))
                   ]))),
         );
@@ -135,10 +135,10 @@ class News extends StatelessWidget {
   }
 }
 
-class NewsDetail extends StatelessWidget {
+class ArticleWidgetDetail extends StatelessWidget {
   final Article _article;
 
-  NewsDetail(this._article);
+  ArticleWidgetDetail(this._article);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
