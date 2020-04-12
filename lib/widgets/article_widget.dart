@@ -1,5 +1,7 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
 import 'package:test_app/api/api_services.dart';
 import 'package:test_app/assets/colors.dart';
 import 'package:test_app/models/article.dart';
@@ -34,36 +36,37 @@ class ArticleCarouselState extends State<ArticleCarousel> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           FutureBuilder<List<Article>>(
-              // future: apiService.getArticles(),
+              future: apiService.getArticles(),
               builder: (context, snapshot) {
-            // if (snapshot.hasData) {
-            //   return carouselSlider = CarouselSlider(
-            //     height: MediaQuery.of(context).size.height * 0.2,
-            //     initialPage: 0,
-            //     enlargeCenterPage: true,
-            //     autoPlay: true,
-            //     reverse: false,
-            //     enableInfiniteScroll: true,
-            //     autoPlayInterval: Duration(seconds: 2),
-            //     autoPlayAnimationDuration: Duration(milliseconds: 2000),
-            //     pauseAutoPlayOnTouch: Duration(seconds: 10),
-            //     scrollDirection: Axis.horizontal,
-            //     onPageChanged: (index) {
-            //       setState(() {
-            //         _current = index;
-            //       });
-            //     },
-            //     items:
-            //         snapshot.data.map((article) => ArticleWidget(article)).toList(),
-            //   );
-            // }
-            return Container(
-              height: MediaQuery.of(context).size.height * 0.2,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }),
+                if (snapshot.hasData) {
+                  return carouselSlider = CarouselSlider(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    initialPage: 0,
+                    enlargeCenterPage: true,
+                    autoPlay: true,
+                    reverse: false,
+                    enableInfiniteScroll: true,
+                    autoPlayInterval: Duration(seconds: 2),
+                    autoPlayAnimationDuration: Duration(milliseconds: 2000),
+                    pauseAutoPlayOnTouch: Duration(seconds: 10),
+                    scrollDirection: Axis.horizontal,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _current = index;
+                      });
+                    },
+                    items: snapshot.data
+                        .map((article) => ArticleWidget(article))
+                        .toList(),
+                  );
+                }
+                return Container(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }),
         ],
       ),
       // Article()
@@ -145,7 +148,8 @@ class ArticleWidgetDetail extends StatelessWidget {
         // appBar: AppBar(
         //   title: Text('Selected image'),
         // ),
-        body: Column(
+        body: ListView(
+      scrollDirection: Axis.vertical,
       children: <Widget>[
         Hero(
             tag: "article_" * _article.id,
@@ -180,52 +184,73 @@ class ArticleWidgetDetail extends StatelessWidget {
         SizedBox(
           height: 32,
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 32),
-          child: Column(
+        Container(
+          height: 200,
+          child: ListView(
+            scrollDirection: Axis.vertical,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: 36.0,
-                        height: 36.0,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            _article.author.imgAuthor,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Text(
-                        _article.author.nameAuthor,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    _article.postDate,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 24,
-              ),
-              Text(
-                _article.article,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
+              WebView(
+                initialUrl: 'http://192.168.100.6:8081/articles/' * _article.id,
+              )
             ],
           ),
         ),
+
+        // Row(
+        //   mainAxisSize: MainAxisSize.max,
+        //   children: <Widget>[
+        //     WebView(
+        //       initialUrl: 'http://192.168.100.6:8081/articles/' * _article.id,
+        //     )
+        //   ],
+        // ),
+
+        // Padding(
+        //   padding: EdgeInsets.symmetric(horizontal: 32),
+        //   child: Column(
+        //     children: <Widget>[
+        //       Row(
+        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //         children: <Widget>[
+        //           Row(
+        //             children: <Widget>[
+        //               Container(
+        //                 width: 36.0,
+        //                 height: 36.0,
+        //                 child: ClipRRect(
+        //                   borderRadius: BorderRadius.circular(12),
+        //                   child: Image.network(
+        //                     _article.author.imgAuthor,
+        //                     fit: BoxFit.cover,
+        //                   ),
+        //                 ),
+        //               ),
+        //               SizedBox(
+        //                 width: 16,
+        //               ),
+        //               Text(
+        //                 _article.author.nameAuthor,
+        //                 style: TextStyle(
+        //                     fontSize: 16, fontWeight: FontWeight.w500),
+        //               ),
+        //             ],
+        //           ),
+        //           Text(
+        //             _article.postDate,
+        //             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        //           )
+        //         ],
+        //       ),
+        //       SizedBox(
+        //         height: 24,
+        //       ),
+        //       Text(
+        //         _article.article,
+        //         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ],
     ));
   }
