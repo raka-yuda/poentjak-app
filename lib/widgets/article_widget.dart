@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -138,61 +140,72 @@ class ArticleWidget extends StatelessWidget {
   }
 }
 
-class ArticleWidgetDetail extends StatelessWidget {
+class ArticleWidgetDetail extends StatefulWidget {
   final Article _article;
 
   ArticleWidgetDetail(this._article);
+
+  @override
+  _ArticleWidgetDetailState createState() => _ArticleWidgetDetailState();
+}
+
+class _ArticleWidgetDetailState extends State<ArticleWidgetDetail> {
+  double progress = 0;
+
+  WebViewController _controller;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         // appBar: AppBar(
         //   title: Text('Selected image'),
         // ),
-        body: ListView(
-      scrollDirection: Axis.vertical,
+        body: Column(
       children: <Widget>[
-        Hero(
-            tag: "article_" * _article.id,
-            child: Stack(
-              children: <Widget>[
-                Container(
-                    // height: 240,
-                    height: MediaQuery.of(context).size.height * 0.35,
-                    width: MediaQuery.of(context).size.width,
-                    child: FittedBox(
-                      child: Image.network(
-                        _article.imgArticle,
-                      ),
-                      fit: BoxFit.cover,
-                    )),
-                Positioned(
-                    top: 200,
-                    left: 48,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: Text(
-                        _article.titleArticle,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                            fontWeight: FontWeight.w600,
-                            decoration: TextDecoration.none),
-                      ),
-                    ))
-              ],
-            )),
+        // Hero(
+        //     tag: "article_" * _article.id,
+        //     child: Stack(
+        //       children: <Widget>[
+        //         Container(
+        //             // height: 240,
+        //             height: MediaQuery.of(context).size.height * 0.35,
+        //             width: MediaQuery.of(context).size.width,
+        //             child: FittedBox(
+        //               child: Image.network(
+        //                 _article.imgArticle,
+        //               ),
+        //               fit: BoxFit.cover,
+        //             )),
+        //         Positioned(
+        //             top: 200,
+        //             left: 48,
+        //             child: Material(
+        //               color: Colors.transparent,
+        //               child: Text(
+        //                 _article.titleArticle,
+        //                 style: TextStyle(
+        //                     color: Colors.white,
+        //                     fontSize: 32,
+        //                     fontWeight: FontWeight.w600,
+        //                     decoration: TextDecoration.none),
+        //               ),
+        //             ))
+        //       ],
+        //     )),
         SizedBox(
           height: 32,
         ),
-        Container(
-          height: 200,
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: <Widget>[
-              WebView(
-                initialUrl: 'http://192.168.100.6:8081/articles/' * _article.id,
-              )
-            ],
+        Expanded(
+          child: WebView(
+            initialUrl: 'http://192.168.100.6:8081/articles/' +
+                widget._article.id.toString(),
+            javascriptMode: JavascriptMode.unrestricted,
+            gestureRecognizers: Set()
+              ..add(
+                Factory<VerticalDragGestureRecognizer>(
+                  () => VerticalDragGestureRecognizer(),
+                ), // or null
+              ),
           ),
         ),
 
