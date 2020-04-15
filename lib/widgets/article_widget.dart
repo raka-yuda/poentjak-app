@@ -162,61 +162,53 @@ class _ArticleWidgetDetailState extends State<ArticleWidgetDetail> {
         // ),
         body: Column(
       children: <Widget>[
-        // Hero(
-        //     tag: "article_" * _article.id,
-        //     child: Stack(
-        //       children: <Widget>[
-        //         Container(
-        //             // height: 240,
-        //             height: MediaQuery.of(context).size.height * 0.35,
-        //             width: MediaQuery.of(context).size.width,
-        //             child: FittedBox(
-        //               child: Image.network(
-        //                 _article.imgArticle,
-        //               ),
-        //               fit: BoxFit.cover,
-        //             )),
-        //         Positioned(
-        //             top: 200,
-        //             left: 48,
-        //             child: Material(
-        //               color: Colors.transparent,
-        //               child: Text(
-        //                 _article.titleArticle,
-        //                 style: TextStyle(
-        //                     color: Colors.white,
-        //                     fontSize: 32,
-        //                     fontWeight: FontWeight.w600,
-        //                     decoration: TextDecoration.none),
-        //               ),
-        //             ))
-        //       ],
-        //     )),
-        SizedBox(
-          height: 32,
-        ),
+        Hero(
+            tag: "article_" * widget._article.id,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                    // height: 240,
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    width: MediaQuery.of(context).size.width,
+                    child: FittedBox(
+                      child: Image.network(
+                        widget._article.imgArticle,
+                      ),
+                      fit: BoxFit.cover,
+                    )),
+                Positioned(
+                    top: 200,
+                    left: 48,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Text(
+                        widget._article.titleArticle,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.w600,
+                            decoration: TextDecoration.none),
+                      ),
+                    ))
+              ],
+            )),
+        // SizedBox(
+        //   height: 32,
+        // ),
         Expanded(
           child: WebView(
             initialUrl: 'http://192.168.100.6:8081/articles/' +
                 widget._article.id.toString(),
             javascriptMode: JavascriptMode.unrestricted,
-            gestureRecognizers: Set()
-              ..add(
-                Factory<VerticalDragGestureRecognizer>(
-                  () => VerticalDragGestureRecognizer(),
-                ), // or null
-              ),
+            // gestureRecognizers: Set()
+            //   ..add(
+            //     Factory<VerticalDragGestureRecognizer>(
+            //       () => VerticalDragGestureRecognizer(),
+            //     ),
+            //     // or null
+            //   ),
           ),
         ),
-
-        // Row(
-        //   mainAxisSize: MainAxisSize.max,
-        //   children: <Widget>[
-        //     WebView(
-        //       initialUrl: 'http://192.168.100.6:8081/articles/' * _article.id,
-        //     )
-        //   ],
-        // ),
 
         // Padding(
         //   padding: EdgeInsets.symmetric(horizontal: 32),
