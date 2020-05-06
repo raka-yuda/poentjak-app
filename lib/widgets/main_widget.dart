@@ -3,7 +3,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../assets/colors.dart';
-import '../assets/images.dart';
 import '../models/mount_model.dart';
 
 class CustomAppBar extends StatelessWidget {
@@ -420,7 +419,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  final Set<Marker> _markers = {};
+  final List<Marker> _markers = [];
   final LatLng _currentPosition = LatLng(3.595196, 98.672226);
 
   @override
@@ -447,7 +446,7 @@ class _MapScreenState extends State<MapScreen> {
           target: _currentPosition,
           zoom: 14.0,
         ),
-        markers: _markers,
+        markers: _markers.toSet(),
       ),
     );
   }

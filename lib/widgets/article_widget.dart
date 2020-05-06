@@ -1,5 +1,4 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -7,6 +6,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:test_app/api/api_services.dart';
 import 'package:test_app/assets/colors.dart';
 import 'package:test_app/models/article.dart';
+
+//Remove all html tags for displaying preview article
 
 class ArticleCarousel extends StatefulWidget {
   ArticleCarousel() : super();
@@ -18,9 +19,8 @@ class ArticleCarousel extends StatefulWidget {
 }
 
 class ArticleCarouselState extends State<ArticleCarousel> {
-  //
   CarouselSlider carouselSlider;
-  int _current = 0;
+  //  int _current = 0;
   ApiService apiService;
 
   void initState() {
@@ -52,11 +52,11 @@ class ArticleCarouselState extends State<ArticleCarousel> {
                     autoPlayAnimationDuration: Duration(milliseconds: 2000),
                     pauseAutoPlayOnTouch: Duration(seconds: 10),
                     scrollDirection: Axis.horizontal,
-                    onPageChanged: (index) {
-                      setState(() {
-                        _current = index;
-                      });
-                    },
+//                    onPageChanged: (index) {
+//                      setState(() {
+//                        _current = index;
+//                      });
+//                    },
                     items: snapshot.data
                         .map((article) => ArticleWidget(article))
                         .toList(),
@@ -152,7 +152,13 @@ class ArticleWidgetDetail extends StatefulWidget {
 class _ArticleWidgetDetailState extends State<ArticleWidgetDetail> {
   double progress = 0;
 
-  WebViewController _controller;
+//  WebViewController _controller;
+
+  String removeAllHtmlTags(String htmlText) {
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+
+    return htmlText.replaceAll(exp, '');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +215,8 @@ class _ArticleWidgetDetailState extends State<ArticleWidgetDetail> {
             //   ),
           ),
         ),
-
+//        drawerContent(removeAllHtmlTags(widget._article.article)),
+//        Text(removeAllHtmlTags(widget._article.article))
         // Padding(
         //   padding: EdgeInsets.symmetric(horizontal: 32),
         //   child: Column(
@@ -258,5 +265,16 @@ class _ArticleWidgetDetailState extends State<ArticleWidgetDetail> {
         // ),
       ],
     ));
+  }
+
+  drawerContent() {
+    String article;
+    return Container(
+      margin: EdgeInsets.only(bottom: 25),
+      height: 3,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15), color: Colors.white),
+      child: Text(article),
+    );
   }
 }
