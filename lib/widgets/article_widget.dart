@@ -272,9 +272,11 @@ class _ArticleWidgetDetailState extends State<ArticleWidgetDetail> {
     return Container(
       margin: EdgeInsets.only(bottom: 25),
       height: MediaQuery.of(context).size.height * 0.5,
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15), color: Colors.white),
-      child: Text(article),
+      child: Text(
+          article.length > 100 ? '${article.substring(0, 100)}...' : article),
     );
   }
 }
