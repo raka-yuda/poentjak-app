@@ -215,7 +215,7 @@ class _ArticleWidgetDetailState extends State<ArticleWidgetDetail> {
             //   ),
           ),
         ),
-//        drawerContent(removeAllHtmlTags(widget._article.article)),
+        drawerContent(removeAllHtmlTags(widget._article.article)),
 //        Text(removeAllHtmlTags(widget._article.article))
         // Padding(
         //   padding: EdgeInsets.symmetric(horizontal: 32),
@@ -267,11 +267,11 @@ class _ArticleWidgetDetailState extends State<ArticleWidgetDetail> {
     ));
   }
 
-  drawerContent() {
+  drawerContent(article) {
     String article;
     return Container(
       margin: EdgeInsets.only(bottom: 25),
-      height: 3,
+      height: MediaQuery.of(context).size.height * 0.5,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15), color: Colors.white),
       child: Text(article),
