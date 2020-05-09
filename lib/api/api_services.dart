@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:test_app/models/mountain.dart';
+
 import "../models/article.dart";
+import "../models/mountain.dart";
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -12,6 +15,17 @@ class ApiService {
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List)
           .map((data) => Article.fromJson(data))
+          .toList();
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<Mountain>> getMountains() async {
+    final response = await http.get("$baseUrl/api/mointains");
+    if (response.statusCode == 200) {
+      return (json.decode(response.body) as List)
+          .map((data) => Mountain.fromJson(data))
           .toList();
     } else {
       return null;
