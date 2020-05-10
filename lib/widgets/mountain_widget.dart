@@ -2,14 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:test_app/api/api_services.dart';
 import 'package:test_app/assets/colors.dart';
+import 'package:test_app/models/article.dart';
+import 'package:test_app/models/mountain.dart';
 
 import '../models/mount_model.dart';
 
 class CardMount extends StatefulWidget {
-  final MountModel _mount;
-
-  CardMount(this._mount);
-
   @override
   _CardMountState createState() => _CardMountState();
 }
@@ -28,126 +26,137 @@ class _CardMountState extends State<CardMount> {
       children: <Widget>[
         Padding(
             padding: EdgeInsets.fromLTRB(20, 0, 10, 20),
-            child: FutureBuilder(
+            child: FutureBuilder<List<Mountain>>(
                 future: apiService.getMountains(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Hero(
-                      tag: "mount_" * snapshot.data[index].id,
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.56,
-                              height: MediaQuery.of(context).size.height * 0.36,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12.0)),
-                                image: DecorationImage(
-                                  image: NetworkImage(_mount.link),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              child: Stack(
-                                children: <Widget>[
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: <Widget>[
-                                      Container(
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 16, vertical: 16),
-                                          width: double.maxFinite,
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(5.0)),
-                                              color: shadeBluelue
-                                                  .withOpacity(0.84)),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(10),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding: EdgeInsets.all(5),
-                                                  child: Material(
-                                                    color: Colors.transparent,
-                                                    child: Text(
-                                                      _mount.mtName,
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w900,
-                                                          color: Colors.white,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .none),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(2.5),
-                                                  child: Material(
-                                                    color: Colors.transparent,
-                                                    child: Text(
-                                                      _mount.mtLocation,
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.white54,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .none),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(2.5),
-                                                  child: Material(
-                                                    color: Colors.transparent,
-                                                    child: Text(
-                                                      _mount.mtDistance,
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.white,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .none),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                  Positioned.fill(
-                                      child: new Material(
-                                          color: Colors.transparent,
-                                          child: new InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            onTap: () => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CardMountDetail(
-                                                            _mount))),
-                                          )))
-                                ],
-                              ))
-                        ],
-                      ),
-                    );
-                  }
+                  return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: mountList.length,
+                      itemBuilder: (context, index) {
+                        if (snapshot.hasData) {
+//                          return CardMount(mountList[index]);
+                          return CardMountain();
+                        }
+                        return Container(
+                          height: MediaQuery.of(context).size.height * 0.36,
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      });
                 })),
       ],
     );
   }
 }
 
-class CardMountDetail extends StatelessWidget {
-  final MountModel _mount;
+class CardMountain extends StatelessWidget {
+  final Mountain _mountain;
 
-  CardMountDetail(this._mount);
+  CardMountain(this._mountain);
+
+  @override
+  Widget build(BuildContext context) {
+    return Hero(
+      tag: "mount_" * _mountain.id,
+      child: Stack(
+        children: <Widget>[
+          Container(
+              width: MediaQuery.of(context).size.width * 0.56,
+              height: MediaQuery.of(context).size.height * 0.36,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                image: DecorationImage(
+                  image: NetworkImage(_mountain.imgMt),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Stack(
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 16),
+                          width: double.maxFinite,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5.0)),
+                              color: shadeBlue.withOpacity(0.84)),
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Text(
+                                      _mountain.nameMt,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w900,
+                                          color: Colors.white,
+                                          decoration: TextDecoration.none),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(2.5),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Text(
+                                      _mountain.location,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white54,
+                                          decoration: TextDecoration.none),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(2.5),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Text(
+                                      "-",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                          decoration: TextDecoration.none),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ))
+                    ],
+                  ),
+                  Positioned.fill(
+                      child: new Material(
+                          color: Colors.transparent,
+                          child: new InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        CardMountDetail(_mountain))),
+                          )))
+                ],
+              ))
+        ],
+      ),
+    );
+  }
+}
+
+class CardMountDetail extends StatelessWidget {
+  final Mountain _mountain;
+
+  CardMountDetail(this._mountain);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
