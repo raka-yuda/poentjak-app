@@ -1,18 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:test_app/api/api_services.dart';
 import 'package:test_app/assets/colors.dart';
-import 'package:test_app/models/article.dart';
 import 'package:test_app/models/mountain.dart';
 
-import '../models/mount_model.dart';
-
-class CardMount extends StatefulWidget {
+class ListMount extends StatefulWidget {
   @override
-  _CardMountState createState() => _CardMountState();
+  _ListMountState createState() => _ListMountState();
 }
 
-class _CardMountState extends State<CardMount> {
+class _ListMountState extends State<ListMount> {
   ApiService apiService;
 
   void initState() {
@@ -22,30 +20,32 @@ class _CardMountState extends State<CardMount> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Padding(
-            padding: EdgeInsets.fromLTRB(20, 0, 10, 20),
-            child: FutureBuilder<List<Mountain>>(
-                future: apiService.getMountains(),
-                builder: (context, snapshot) {
-                  return ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: mountList.length,
-                      itemBuilder: (context, index) {
-                        if (snapshot.hasData) {
-//                          return CardMount(mountList[index]);
-                          return CardMountain();
-                        }
-                        return Container(
-                          height: MediaQuery.of(context).size.height * 0.36,
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      });
-                })),
-      ],
+    return Container(
+      // margin: EdgeInsets.symmetric(vertical: 20.0),
+      height: 320.0,
+      alignment: Alignment.center,
+      child: Padding(
+          padding: EdgeInsets.fromLTRB(20, 0, 10, 20),
+          child: FutureBuilder<List<Mountain>>(
+              future: apiService.getMountains(),
+              builder: (context, snapshot) {
+//                    return Text(snapshot.data.toString());
+                return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      if (snapshot.hasData) {
+                        Mountain mountain = snapshot.data[index];
+                        return CardMountain(mountain);
+                      }
+                      return Container(
+                        height: MediaQuery.of(context).size.height * 0.36,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    });
+              })),
     );
   }
 }
@@ -64,6 +64,7 @@ class CardMountain extends StatelessWidget {
           Container(
               width: MediaQuery.of(context).size.width * 0.56,
               height: MediaQuery.of(context).size.height * 0.36,
+              margin: EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(12.0)),
                 image: DecorationImage(
@@ -166,7 +167,7 @@ class CardMountDetail extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.46,
             width: MediaQuery.of(context).size.width,
             child: Hero(
-              tag: "mount_" * _mount.id,
+              tag: "mount_" * _mountain.id,
               child: Stack(
                 children: <Widget>[
                   Container(
@@ -177,7 +178,7 @@ class CardMountDetail extends StatelessWidget {
                             bottomRight: Radius.circular(12),
                             bottomLeft: Radius.circular(12)),
                         image: DecorationImage(
-                            image: NetworkImage(_mount.link),
+                            image: NetworkImage(_mountain.imgMt),
                             fit: BoxFit.cover)),
                   ),
                   Positioned(
@@ -204,7 +205,7 @@ class CardMountDetail extends StatelessWidget {
                                 Material(
                                   color: Colors.transparent,
                                   child: Text(
-                                    _mount.mtName,
+                                    _mountain.nameMt,
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w900,
@@ -217,7 +218,7 @@ class CardMountDetail extends StatelessWidget {
                                 ),
                                 Material(
                                   color: Colors.transparent,
-                                  child: Text(_mount.mtLocation,
+                                  child: Text(_mountain.location,
                                       style: TextStyle(
                                           color: Colors.black54,
                                           fontSize: 14,
@@ -229,10 +230,11 @@ class CardMountDetail extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 GestureDetector(
-                                  onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MapScreen())),
+                                  onTap: () => {},
+//                                      Navigator.push(
+//                                      context,
+//                                      MaterialPageRoute(
+//                                          builder: (context) => MapScreen())),
                                   child: Container(
                                     width: 50,
                                     height: 50,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/widgets/main_widget.dart';
 import 'package:test_app/widgets/article_widget.dart';
+import 'package:test_app/widgets/mountain_widget.dart';
 import '../assets/colors.dart';
 import '../models/mount_model.dart';
 
@@ -58,16 +59,7 @@ class Home extends StatelessWidget {
                     ),
                   ]),
                 ),
-                Container(
-                    // margin: EdgeInsets.symmetric(vertical: 20.0),
-                    height: 320.0,
-                    alignment: Alignment.center,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: mountList.length,
-                        itemBuilder: (context, index) {
-                          return CardMount(mountList[index]);
-                        })),
+                ListMount(),
               ],
             ))
         //     Scaffold(
