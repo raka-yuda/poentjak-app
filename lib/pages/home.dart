@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/widgets/main_widget.dart';
-import 'package:test_app/widgets/article_widget.dart';
-import 'package:test_app/widgets/mountain_widget.dart';
-import '../assets/colors.dart';
-import '../models/mount_model.dart';
 
-class Home extends StatelessWidget {
+import '../widgets/main_widget.dart';
+import '../widgets/article_widget.dart';
+import '../widgets/mountain_widget.dart';
+import '../assets/colors.dart';
+
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,24 +22,11 @@ class Home extends StatelessWidget {
                 elevation: 0,
                 backgroundColor: Colors.white,
                 title: CustomAppBar()),
-            bottomNavigationBar: BottomNavigationBar(
-//              currentIndex: provider.currentIndex,
-//              onTap: (index) {
-//                provider.currentIndex = index;
-//              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: new Icon(Icons.home),
-                  title: new Text('Home'),
-                ),
-                BottomNavigationBarItem(
-                  icon: new Icon(Icons.search),
-                  title: new Text('Search'),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite),
-                  title: Text('Favorites'),
-                )
+            bottomNavigationBar: Row(
+              children: <Widget>[
+                customNavigationBarItem(Icons.home, true),
+                customNavigationBarItem(Icons.search, true),
+                customNavigationBarItem(Icons.favorite, true),
               ],
             ),
             body: ListView(
@@ -81,14 +73,19 @@ class Home extends StatelessWidget {
                 ),
                 ListMount(),
               ],
-            ))
-        //     Scaffold(
-        //   body: Center(
-        //     child: CardMount(),
-        //   ),
-        // )
+            )));
+  }
 
-        // HeroTest()
-        );
+  Widget customNavigationBarItem(IconData icon, bool isActive) {
+    return Container(
+      height: 60,
+      width: MediaQuery.of(context).size.width / 3,
+      decoration: BoxDecoration(
+          color: isActive ? Colors.blueAccent[100] : Colors.white),
+      child: Icon(
+        icon,
+        color: isActive ? Colors.white : Colors.blueAccent[100],
+      ),
+    );
   }
 }
