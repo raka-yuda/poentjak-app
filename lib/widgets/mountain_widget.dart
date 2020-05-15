@@ -21,32 +21,27 @@ class _ListMountState extends State<ListMount> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // margin: EdgeInsets.symmetric(vertical: 20.0),
-      height: 320.0,
-      alignment: Alignment.center,
-      child: Padding(
-          padding: EdgeInsets.fromLTRB(20, 0, 10, 20),
-          child: FutureBuilder<List<Mountain>>(
-              future: apiService.getMountains(),
-              builder: (context, snapshot) {
-//                    return Text(snapshot.data.toString());
-                return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, index) {
-                      if (snapshot.hasData) {
-                        Mountain mountain = snapshot.data[index];
-                        return CardMountain(mountain);
-                      }
-                      return Container(
-                        height: MediaQuery.of(context).size.height * 0.36,
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    });
-              })),
-    );
+        height: 280.0,
+        alignment: Alignment.center,
+        child: Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 10, 20),
+            child: FutureBuilder<List<Mountain>>(
+                future: apiService.getMountains(),
+                builder: (context, snapshot) {
+                  return (snapshot.hasData)
+                      ? ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            Mountain mountain = snapshot.data[index];
+                            return CardMountain(mountain);
+                          })
+                      : Container(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                })));
   }
 }
 
