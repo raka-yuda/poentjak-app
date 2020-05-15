@@ -201,20 +201,20 @@ class _ArticleWidgetDetailState extends State<ArticleWidgetDetail> {
         // SizedBox(
         //   height: 32,
         // ),
-        Expanded(
-          child: WebView(
-            initialUrl: 'http://192.168.100.6:8081/articles/' +
-                widget._article.id.toString(),
-            javascriptMode: JavascriptMode.unrestricted,
-            // gestureRecognizers: Set()
-            //   ..add(
-            //     Factory<VerticalDragGestureRecognizer>(
-            //       () => VerticalDragGestureRecognizer(),
-            //     ),
-            //     // or null
-            //   ),
-          ),
-        ),
+//        Expanded(
+//          child: WebView(
+//            initialUrl: 'http://192.168.100.6:8081/articles/' +
+//                widget._article.id.toString(),
+//            javascriptMode: JavascriptMode.unrestricted,
+//            // gestureRecognizers: Set()
+//            //   ..add(
+//            //     Factory<VerticalDragGestureRecognizer>(
+//            //       () => VerticalDragGestureRecognizer(),
+//            //     ),
+//            //     // or null
+//            //   ),
+//          ),
+//        ),
         drawerContent(removeAllHtmlTags(widget._article.article)),
 //        Text(removeAllHtmlTags(widget._article.article))
         // Padding(
@@ -267,8 +267,7 @@ class _ArticleWidgetDetailState extends State<ArticleWidgetDetail> {
     ));
   }
 
-  drawerContent(article) {
-    String article;
+  drawerContent(String article) {
     return Container(
       margin: EdgeInsets.only(bottom: 25),
       height: MediaQuery.of(context).size.height * 0.5,
