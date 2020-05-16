@@ -48,43 +48,45 @@ class _HomePageState extends State<HomePage> {
         body: ListView(
           scrollDirection: Axis.vertical,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-              child: Stack(children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(top: 18, left: 4),
-                  height: 10,
-                  width: 132,
-                  color: shadeBlue,
-                ),
-                Text(
-                  'Unique Facts',
-                  style: TextStyle(
-                      fontSize: 28,
-                      color: darkBlue,
-                      fontWeight: FontWeight.w900),
-                ),
-              ]),
-            ),
+//            Padding(
+//              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+//              child: Stack(children: <Widget>[
+//                Container(
+//                  margin: EdgeInsets.only(top: 18, left: 4),
+//                  height: 10,
+//                  width: 132,
+//                  color: shadeBlue,
+//                ),
+//                Text(
+//                  'Unique Facts',
+//                  style: TextStyle(
+//                      fontSize: 28,
+//                      color: darkBlue,
+//                      fontWeight: FontWeight.w900),
+//                ),
+//              ]),
+//            ),
+            titleSection('Unique Facts'),
             ArticleCarousel(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-              child: Stack(children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(top: 18, left: 4),
-                  height: 10,
-                  width: 132,
-                  color: shadeBlue,
-                ),
-                Text(
-                  'Arround You',
-                  style: TextStyle(
-                      fontSize: 28,
-                      color: darkBlue,
-                      fontWeight: FontWeight.w900),
-                ),
-              ]),
-            ),
+            titleSection('Arround You'),
+//            Padding(
+//              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+//              child: Stack(children: <Widget>[
+//                Container(
+//                  margin: EdgeInsets.only(top: 18, left: 4),
+//                  height: 10,
+//                  width: 132,
+//                  color: shadeBlue,
+//                ),
+//                Text(
+//                  'Arround You',
+//                  style: TextStyle(
+//                      fontSize: 28,
+//                      color: darkBlue,
+//                      fontWeight: FontWeight.w900),
+//                ),
+//              ]),
+//            ),
             ListMount(),
           ],
         ));
@@ -110,6 +112,25 @@ class _HomePageState extends State<HomePage> {
               : Colors.blueAccent[100],
         ),
       ),
+    );
+  }
+
+  Widget titleSection(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+      child: Stack(children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(top: 18, left: 4),
+          height: 10,
+          width: 132,
+          color: shadeBlue,
+        ),
+        Text(
+          title,
+          style: TextStyle(
+              fontSize: 28, color: darkBlue, fontWeight: FontWeight.w900),
+        ),
+      ]),
     );
   }
 }
