@@ -134,3 +134,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      color: Colors.blueAccent[100],
+      child: Center(
+        child: Container(
+          child: Icon(
+            Icons.home,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
