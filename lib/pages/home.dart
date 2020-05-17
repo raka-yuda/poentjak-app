@@ -33,9 +33,21 @@ class _HomePageState extends State<HomePage> {
         bottomNavigationBar: Container(
           height: 64,
           decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8), topRight: Radius.circular(8))),
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 25.0, // soften the shadow
+                spreadRadius: 5.0, //extend the shadow
+                offset: Offset(
+                  0, // Move to right 10  horizontally
+                  15.0, // Move to bottom 10 Vertically
+                ),
+              )
+            ],
+          ),
           child: Row(
             children: <Widget>[
 //                  Icon(Icons.home),
@@ -70,7 +82,7 @@ class _HomePageState extends State<HomePage> {
             ArticleCarousel(),
             titleSection('Arround You'),
 //            Padding(
-//              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+//              padding: const EdgeInsets.symmetric(horizontal: 32, vText(ertical: 24),
 //              child: Stack(children: <Widget>[
 //                Container(
 //                  margin: EdgeInsets.only(top: 18, left: 4),
@@ -102,15 +114,15 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         height: 48,
         width: MediaQuery.of(context).size.width / 3,
-        decoration: index == _selectedItemIndex
-            ? BoxDecoration(color: Colors.blueAccent[100])
-            : BoxDecoration(),
-        child: Icon(
-          icon,
-          color: index == _selectedItemIndex
-              ? Colors.white
-              : Colors.blueAccent[100],
-        ),
+        child: index == _selectedItemIndex
+            ? CircleAvatar(
+                backgroundColor: Colors.blueAccent[100],
+                child: Icon(icon, color: Colors.white),
+              )
+            : Icon(
+                icon,
+                color: Colors.blueAccent[100],
+              ),
       ),
     );
   }
