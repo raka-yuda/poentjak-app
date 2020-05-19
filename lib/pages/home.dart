@@ -60,45 +60,9 @@ class _HomePageState extends State<HomePage> {
         body: ListView(
           scrollDirection: Axis.vertical,
           children: <Widget>[
-//            Padding(
-//              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-//              child: Stack(children: <Widget>[
-//                Container(
-//                  margin: EdgeInsets.only(top: 18, left: 4),
-//                  height: 10,
-//                  width: 132,
-//                  color: shadeBlue,
-//                ),
-//                Text(
-//                  'Unique Facts',
-//                  style: TextStyle(
-//                      fontSize: 28,
-//                      color: darkBlue,
-//                      fontWeight: FontWeight.w900),
-//                ),
-//              ]),
-//            ),
             titleSection('Unique Facts'),
             ArticleCarousel(),
             titleSection('Arround You'),
-//            Padding(
-//              padding: const EdgeInsets.symmetric(horizontal: 32, vText(ertical: 24),
-//              child: Stack(children: <Widget>[
-//                Container(
-//                  margin: EdgeInsets.only(top: 18, left: 4),
-//                  height: 10,
-//                  width: 132,
-//                  color: shadeBlue,
-//                ),
-//                Text(
-//                  'Arround You',
-//                  style: TextStyle(
-//                      fontSize: 28,
-//                      color: darkBlue,
-//                      fontWeight: FontWeight.w900),
-//                ),
-//              ]),
-//            ),
             ListMount(),
           ],
         ));
@@ -112,18 +76,31 @@ class _HomePageState extends State<HomePage> {
         });
       },
       child: Container(
-        height: 48,
-        width: MediaQuery.of(context).size.width / 3,
-        child: index == _selectedItemIndex
-            ? CircleAvatar(
-                backgroundColor: Colors.blueAccent[100],
-                child: Icon(icon, color: Colors.white),
-              )
-            : Icon(
+          height: 48,
+          width: MediaQuery.of(context).size.width / 3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Icon(
                 icon,
-                color: Colors.blueAccent[100],
+                color: index == _selectedItemIndex
+                    ? Colors.blueAccent[600]
+                    : Colors.blueAccent[100],
               ),
-      ),
+              SizedBox(
+                height: 8,
+              ),
+              index == _selectedItemIndex
+                  ? Container(
+                      width: 12,
+                      height: 8,
+                      decoration: BoxDecoration(
+                          color: Colors.blueAccent[100],
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                    )
+                  : Container()
+            ],
+          )),
     );
   }
 
