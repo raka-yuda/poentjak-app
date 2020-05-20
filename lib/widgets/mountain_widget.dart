@@ -275,51 +275,103 @@ class CardMountDetail extends StatelessWidget {
             ),
             child: ListView(
               children: <Widget>[
-                ExpansionTile(
-                  title: Text("Pos 1"),
-                  trailing: Icon(Icons.keyboard_arrow_down),
+//                ExpansionTile(
+//                  title: Text("Pos 1"),
+//                  trailing: Icon(Icons.keyboard_arrow_down),
+//                  children: <Widget>[
+//                    Column(
+//                      children: <Widget>[Text("You've been arrive at pos 1")],
+//                    )
+//                  ],
+//                ),
+//                ExpansionTile(
+//                  title: Text("Pos 2"),
+//                  trailing: Icon(Icons.keyboard_arrow_down),
+//                  children: <Widget>[
+//                    Column(
+//                      children: <Widget>[Text("You've been arrive at pos 2")],
+//                    )
+//                  ],
+//                ),
+//                ExpansionTile(
+//                  title: Text("Pos 3"),
+//                  trailing: Icon(Icons.keyboard_arrow_down),
+//                  children: <Widget>[
+//                    Column(
+//                      children: <Widget>[Text("You've been arrive at pos 3")],
+//                    )
+//                  ],
+//                ),
+//                ExpansionTile(
+//                  title: Text("Pos 4"),
+//                  trailing: Icon(Icons.keyboard_arrow_down),
+//                  children: <Widget>[
+//                    Column(
+//                      children: <Widget>[Text("You've been arrive at pos 4")],
+//                    )
+//                  ],
+//                ),
+//                ExpansionTile(
+//                  title: Text("Pos 5"),
+//                  trailing: Icon(Icons.keyboard_arrow_down),
+//                  children: <Widget>[
+//                    Column(
+//                      children: <Widget>[Text("You've been arrive at pos 5")],
+//                    )
+//                  ],
+//                ),
+                Row(
                   children: <Widget>[
                     Column(
-                      children: <Widget>[Text("You've been arrive at pos 1")],
-                    )
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        CircleAvatar(
+                          child: Center(
+                            child: Text("1"),
+                          ),
+                        ),
+                        Container(
+                          height: 10,
+                          width: 4,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(8)),
+                              color: Colors.black26),
+                        )
+                      ],
+                    ),
                   ],
                 ),
-                ExpansionTile(
-                  title: Text("Pos 2"),
-                  trailing: Icon(Icons.keyboard_arrow_down),
+                Row(
                   children: <Widget>[
                     Column(
-                      children: <Widget>[Text("You've been arrive at pos 2")],
-                    )
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          height: 10,
+                          width: 4,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.vertical(
+                                  bottom: Radius.circular(8)),
+                              color: Colors.black26),
+                        ),
+                        CircleAvatar(
+                          child: Center(
+                            child: Text("2"),
+                          ),
+                        ),
+//                        Container(
+//                          height: 10,
+//                          width: 4,
+//                          decoration: BoxDecoration(
+//                              borderRadius: BorderRadius.vertical(
+//                                  top: Radius.circular(8)),
+//                              color: Colors.black26),
+//                        )
+                      ],
+                    ),
                   ],
-                ),
-                ExpansionTile(
-                  title: Text("Pos 3"),
-                  trailing: Icon(Icons.keyboard_arrow_down),
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[Text("You've been arrive at pos 3")],
-                    )
-                  ],
-                ),
-                ExpansionTile(
-                  title: Text("Pos 4"),
-                  trailing: Icon(Icons.keyboard_arrow_down),
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[Text("You've been arrive at pos 4")],
-                    )
-                  ],
-                ),
-                ExpansionTile(
-                  title: Text("Pos 5"),
-                  trailing: Icon(Icons.keyboard_arrow_down),
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[Text("You've been arrive at pos 5")],
-                    )
-                  ],
-                ),
+                )
               ],
             )),
       ],
