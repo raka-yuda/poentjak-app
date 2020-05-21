@@ -360,14 +360,6 @@ class CardMountDetail extends StatelessWidget {
                             child: Text("2"),
                           ),
                         ),
-//                        Container(
-//                          height: 10,
-//                          width: 4,
-//                          decoration: BoxDecoration(
-//                              borderRadius: BorderRadius.vertical(
-//                                  top: Radius.circular(8)),
-//                              color: Colors.black26),
-//                        )
                       ],
                     ),
                   ],
