@@ -151,6 +151,7 @@ class CardMountain extends StatelessWidget {
 
 class CardMountDetail extends StatelessWidget {
   final Mountain _mountain;
+  List<int> listPost = [1, 2, 3];
 
   CardMountDetail(this._mountain);
   @override
@@ -273,100 +274,181 @@ class CardMountDetail extends StatelessWidget {
               borderRadius: new BorderRadius.all(Radius.circular(12)),
               color: Colors.white,
             ),
-            child: ListView(
-              children: <Widget>[
-//                ExpansionTile(
-//                  title: Text("Pos 1"),
-//                  trailing: Icon(Icons.keyboard_arrow_down),
-//                  children: <Widget>[
-//                    Column(
-//                      children: <Widget>[Text("You've been arrive at pos 1")],
-//                    )
-//                  ],
-//                ),
-//                ExpansionTile(
-//                  title: Text("Pos 2"),
-//                  trailing: Icon(Icons.keyboard_arrow_down),
-//                  children: <Widget>[
-//                    Column(
-//                      children: <Widget>[Text("You've been arrive at pos 2")],
-//                    )
-//                  ],
-//                ),
-//                ExpansionTile(
-//                  title: Text("Pos 3"),
-//                  trailing: Icon(Icons.keyboard_arrow_down),
-//                  children: <Widget>[
-//                    Column(
-//                      children: <Widget>[Text("You've been arrive at pos 3")],
-//                    )
-//                  ],
-//                ),
-//                ExpansionTile(
-//                  title: Text("Pos 4"),
-//                  trailing: Icon(Icons.keyboard_arrow_down),
-//                  children: <Widget>[
-//                    Column(
-//                      children: <Widget>[Text("You've been arrive at pos 4")],
-//                    )
-//                  ],
-//                ),
-//                ExpansionTile(
-//                  title: Text("Pos 5"),
-//                  trailing: Icon(Icons.keyboard_arrow_down),
-//                  children: <Widget>[
-//                    Column(
-//                      children: <Widget>[Text("You've been arrive at pos 5")],
-//                    )
-//                  ],
-//                ),
-                Row(
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        CircleAvatar(
-                          child: Center(
-                            child: Text("1"),
-                          ),
-                        ),
-                        Container(
-                          height: 10,
-                          width: 4,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(8)),
-                              color: Colors.black26),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          height: 10,
-                          width: 4,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.vertical(
-                                  bottom: Radius.circular(8)),
-                              color: Colors.black26),
-                        ),
-                        CircleAvatar(
-                          child: Center(
-                            child: Text("2"),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                )
-              ],
-            )),
+            child: postMountainWidget(listPost: listPost)),
       ],
     ));
+  }
+
+  Widget postMountainWidget({List listPost}) {
+    if (listPost.length == 1) {
+      return ListView(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircleAvatar(
+                    child: Center(
+                      child: Text("1"),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    } else if (listPost.length == 2) {
+      return ListView(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircleAvatar(
+                    child: Center(
+                      child: Text("1"),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Container(
+                    height: 10,
+                    width: 4,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(8)),
+                        color: Colors.black26),
+                  )
+                ],
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    height: 10,
+                    width: 4,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.vertical(bottom: Radius.circular(8)),
+                        color: Colors.black26),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  CircleAvatar(
+                    child: Center(
+                      child: Text("3"),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          )
+        ],
+      );
+    } else {
+      return ListView(
+        children: <Widget>[
+          // Widget circle avatar for start
+          Row(
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircleAvatar(
+                    child: Center(
+                      child: Text("1"),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Container(
+                    height: 10,
+                    width: 4,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(8)),
+                        color: Colors.black26),
+                  )
+                ],
+              ),
+            ],
+          ),
+          // Widget circle avatar for middle
+          Row(
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    height: 10,
+                    width: 4,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.vertical(bottom: Radius.circular(8)),
+                        color: Colors.black26),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  CircleAvatar(
+                    child: Center(
+                      child: Text("2"),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Container(
+                    height: 10,
+                    width: 4,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(8)),
+                        color: Colors.black26),
+                  )
+                ],
+              ),
+            ],
+          ),
+          // Widget circle avatar for end
+          Row(
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    height: 10,
+                    width: 4,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.vertical(bottom: Radius.circular(8)),
+                        color: Colors.black26),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  CircleAvatar(
+                    child: Center(
+                      child: Text("3"),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          )
+        ],
+      );
+    }
+    return Column();
   }
 }
