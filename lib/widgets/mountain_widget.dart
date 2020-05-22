@@ -151,7 +151,7 @@ class CardMountain extends StatelessWidget {
 
 class CardMountDetail extends StatelessWidget {
   final Mountain _mountain;
-  List<int> listPost = [1, 2, 3];
+  final List<int> listPost = [1, 2, 4];
 
   CardMountDetail(this._mountain);
   @override
@@ -279,7 +279,7 @@ class CardMountDetail extends StatelessWidget {
     ));
   }
 
-  Widget postMountainWidget({List listPost}) {
+  Widget postMountainWidget({List<int> listPost}) {
     if (listPost.length == 1) {
       return ListView(
         children: <Widget>[
@@ -290,7 +290,7 @@ class CardMountDetail extends StatelessWidget {
                 children: <Widget>[
                   CircleAvatar(
                     child: Center(
-                      child: Text("1"),
+                      child: Text(listPost[0].toString()),
                     ),
                   ),
                 ],
@@ -309,7 +309,7 @@ class CardMountDetail extends StatelessWidget {
                 children: <Widget>[
                   CircleAvatar(
                     child: Center(
-                      child: Text("1"),
+                      child: Text(listPost[0].toString()),
                     ),
                   ),
                   SizedBox(
@@ -345,7 +345,7 @@ class CardMountDetail extends StatelessWidget {
                   ),
                   CircleAvatar(
                     child: Center(
-                      child: Text("3"),
+                      child: Text(listPost[2].toString()),
                     ),
                   ),
                 ],
@@ -365,7 +365,7 @@ class CardMountDetail extends StatelessWidget {
                 children: <Widget>[
                   CircleAvatar(
                     child: Center(
-                      child: Text("1"),
+                      child: Text(listPost[0].toString()),
                     ),
                   ),
                   SizedBox(
@@ -402,7 +402,7 @@ class CardMountDetail extends StatelessWidget {
                   ),
                   CircleAvatar(
                     child: Center(
-                      child: Text("2"),
+                      child: Text(listPost[1].toString()),
                     ),
                   ),
                   SizedBox(
@@ -439,7 +439,7 @@ class CardMountDetail extends StatelessWidget {
                   ),
                   CircleAvatar(
                     child: Center(
-                      child: Text("3"),
+                      child: Text(listPost[2].toString()),
                     ),
                   ),
                 ],
