@@ -151,7 +151,7 @@ class CardMountain extends StatelessWidget {
 
 class CardMountDetail extends StatelessWidget {
   final Mountain _mountain;
-  final List<int> listPost = [1, 2, 4];
+  final List<int> listPost = [1, 2];
 
   CardMountDetail(this._mountain);
   @override
