@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../main.dart';
 import '../widgets/main_widget.dart';
 import '../widgets/article_widget.dart';
 import '../widgets/mountain_widget.dart';
@@ -51,9 +52,9 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             children: <Widget>[
 //                  Icon(Icons.home),
-              customNavigationBarItem(Icons.home, 0),
-              customNavigationBarItem(Icons.search, 1),
-              customNavigationBarItem(Icons.favorite, 2),
+              customNavigationBarItem(Icons.home, 0, '/'),
+              customNavigationBarItem(Icons.search, 1, '/search'),
+              customNavigationBarItem(Icons.favorite, 2, '/favorite'),
             ],
           ),
         ),
@@ -68,39 +69,41 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  Widget customNavigationBarItem(IconData icon, int index) {
+  Widget customNavigationBarItem(IconData icon, int index, String route) {
     return GestureDetector(
       onTap: () {
         setState(() {
           _selectedItemIndex = index;
         });
+        Navigator.pushNamed(context, route);
       },
       child: Container(
           height: 48,
           width: MediaQuery.of(context).size.width / 3,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                icon,
-                color: index == _selectedItemIndex
-                    ? Colors.blueAccent[600]
-                    : Colors.blueAccent[100],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              index == _selectedItemIndex
-                  ? Container(
+          child: (index == _selectedItemIndex)
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(icon, color: Colors.blueAccent[600]),
+                    SizedBox(
+                      height: 2,
+                    ),
+                    Container(
                       width: 12,
                       height: 8,
                       decoration: BoxDecoration(
                           color: Colors.blueAccent[100],
                           borderRadius: BorderRadius.all(Radius.circular(8))),
                     )
-                  : Container()
-            ],
-          )),
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                      Icon(icon, color: Colors.blueAccent[100])
+                    ])),
     );
   }
 

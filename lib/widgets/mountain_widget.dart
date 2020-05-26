@@ -151,7 +151,7 @@ class CardMountain extends StatelessWidget {
 
 class CardMountDetail extends StatelessWidget {
   final Mountain _mountain;
-  final List<int> listPost = [1, 2];
+  final List<int> listPost = [1, 2, 3, 4];
 
   CardMountDetail(this._mountain);
   @override
@@ -281,174 +281,213 @@ class CardMountDetail extends StatelessWidget {
 
   Widget postMountainWidget({List<int> listPost}) {
     if (listPost.length == 1) {
-      return ListView(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  CircleAvatar(
-                    child: Center(
-                      child: Text(listPost[0].toString()),
+      return ListView.builder(
+          itemCount: listPost.length,
+          itemBuilder: (BuildContext ctxt, int index) {
+            return Row(
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CircleAvatar(
+                      child: Center(
+                        child: Text(listPost[index].toString()),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      );
-    } else if (listPost.length == 2) {
-      return ListView(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  CircleAvatar(
-                    child: Center(
-                      child: Text(listPost[0].toString()),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Container(
-                    height: 10,
-                    width: 4,
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(8)),
-                        color: Colors.black26),
-                  )
-                ],
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    height: 10,
-                    width: 4,
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.vertical(bottom: Radius.circular(8)),
-                        color: Colors.black26),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  CircleAvatar(
-                    child: Center(
-                      child: Text(listPost[2].toString()),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          )
-        ],
-      );
+                  ],
+                ),
+              ],
+            );
+          });
     } else {
-      return ListView(
-        children: <Widget>[
-          // Widget circle avatar for start
-          Row(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+      return ListView.builder(
+          itemCount: listPost.length,
+          itemBuilder: (BuildContext ctxt, int index) {
+            if (index == listPost.first - 1) {
+              return Row(
                 children: <Widget>[
-                  CircleAvatar(
-                    child: Center(
-                      child: Text(listPost[0].toString()),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Container(
-                    height: 10,
-                    width: 4,
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(8)),
-                        color: Colors.black26),
-                  )
-                ],
-              ),
-            ],
-          ),
-          // Widget circle avatar for middle
-          Row(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    height: 10,
-                    width: 4,
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.vertical(bottom: Radius.circular(8)),
-                        color: Colors.black26),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  CircleAvatar(
-                    child: Center(
-                      child: Text(listPost[1].toString()),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Container(
-                    height: 10,
-                    width: 4,
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(8)),
-                        color: Colors.black26),
-                  )
-                ],
-              ),
-            ],
-          ),
-          // Widget circle avatar for end
-          Row(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    height: 10,
-                    width: 4,
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.vertical(bottom: Radius.circular(8)),
-                        color: Colors.black26),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  CircleAvatar(
-                    child: Center(
-                      child: Text(listPost[2].toString()),
-                    ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CircleAvatar(
+                        child: Center(
+                          child: Text(listPost[index].toString()),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Container(
+                        height: 10,
+                        width: 4,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(8)),
+                            color: Colors.black26),
+                      )
+                    ],
                   ),
                 ],
-              ),
-            ],
-          )
-        ],
-      );
+              );
+            } else if (index == listPost.last - 1) {
+              return Row(
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        height: 10,
+                        width: 4,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.vertical(
+                                bottom: Radius.circular(8)),
+                            color: Colors.black26),
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      CircleAvatar(
+                        child: Center(
+                          child: Text(listPost[index].toString()),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            } else {
+              return Row(
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        height: 10,
+                        width: 4,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.vertical(
+                                bottom: Radius.circular(8)),
+                            color: Colors.black26),
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      CircleAvatar(
+                        child: Center(
+                          child: Text(listPost[index].toString()),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Container(
+                        height: 10,
+                        width: 4,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(8)),
+                            color: Colors.black26),
+                      )
+                    ],
+                  ),
+                ],
+              );
+            }
+            return Container();
+          });
+//      return ListView(
+//        children: <Widget>[
+//          // Widget circle avatar for start
+//          Row(
+//            children: <Widget>[
+//              Column(
+//                mainAxisAlignment: MainAxisAlignment.center,
+//                children: <Widget>[
+//                  CircleAvatar(
+//                    child: Center(
+//                      child: Text(listPost[0].toString()),
+//                    ),
+//                  ),
+//                  SizedBox(
+//                    height: 4,
+//                  ),
+//                  Container(
+//                    height: 10,
+//                    width: 4,
+//                    decoration: BoxDecoration(
+//                        borderRadius:
+//                            BorderRadius.vertical(top: Radius.circular(8)),
+//                        color: Colors.black26),
+//                  )
+//                ],
+//              ),
+//            ],
+//          ),
+//          // Widget circle avatar for middle
+//          Row(
+//            children: <Widget>[
+//              Column(
+//                mainAxisAlignment: MainAxisAlignment.center,
+//                children: <Widget>[
+//                  Container(
+//                    height: 10,
+//                    width: 4,
+//                    decoration: BoxDecoration(
+//                        borderRadius:
+//                            BorderRadius.vertical(bottom: Radius.circular(8)),
+//                        color: Colors.black26),
+//                  ),
+//                  SizedBox(
+//                    height: 4,
+//                  ),
+//                  CircleAvatar(
+//                    child: Center(
+//                      child: Text(listPost[1].toString()),
+//                    ),
+//                  ),
+//                  SizedBox(
+//                    height: 4,
+//                  ),
+//                  Container(
+//                    height: 10,
+//                    width: 4,
+//                    decoration: BoxDecoration(
+//                        borderRadius:
+//                            BorderRadius.vertical(top: Radius.circular(8)),
+//                        color: Colors.black26),
+//                  )
+//                ],
+//              ),
+//            ],
+//          ),
+//          // Widget circle avatar for end
+//          Row(
+//            children: <Widget>[
+//              Column(
+//                mainAxisAlignment: MainAxisAlignment.center,
+//                children: <Widget>[
+//                  Container(
+//                    height: 10,
+//                    width: 4,
+//                    decoration: BoxDecoration(
+//                        borderRadius:
+//                            BorderRadius.vertical(bottom: Radius.circular(8)),
+//                        color: Colors.black26),
+//                  ),
+//                  SizedBox(
+//                    height: 4,
+//                  ),
+//                  CircleAvatar(
+//                    child: Center(
+//                      child: Text(listPost[2].toString()),
+//                    ),
+//                  ),
+//                ],
+//              ),
+//            ],
+//          )
+//        ],
+//      );
     }
-    return Column();
   }
 }
