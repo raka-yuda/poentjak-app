@@ -284,19 +284,24 @@ class CardMountDetail extends StatelessWidget {
       return ListView.builder(
           itemCount: listPost.length,
           itemBuilder: (BuildContext ctxt, int index) {
-            return Row(
-              children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CircleAvatar(
-                      child: Center(
-                        child: Text(listPost[index].toString()),
+            return GestureDetector(
+              onTap: () {
+                expandedPostWidget();
+              },
+              child: Row(
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CircleAvatar(
+                        child: Center(
+                          child: Text(listPost[index].toString()),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             );
           });
     } else {
@@ -395,99 +400,29 @@ class CardMountDetail extends StatelessWidget {
             }
             return Container();
           });
-//      return ListView(
-//        children: <Widget>[
-//          // Widget circle avatar for start
-//          Row(
-//            children: <Widget>[
-//              Column(
-//                mainAxisAlignment: MainAxisAlignment.center,
-//                children: <Widget>[
-//                  CircleAvatar(
-//                    child: Center(
-//                      child: Text(listPost[0].toString()),
-//                    ),
-//                  ),
-//                  SizedBox(
-//                    height: 4,
-//                  ),
-//                  Container(
-//                    height: 10,
-//                    width: 4,
-//                    decoration: BoxDecoration(
-//                        borderRadius:
-//                            BorderRadius.vertical(top: Radius.circular(8)),
-//                        color: Colors.black26),
-//                  )
-//                ],
-//              ),
-//            ],
-//          ),
-//          // Widget circle avatar for middle
-//          Row(
-//            children: <Widget>[
-//              Column(
-//                mainAxisAlignment: MainAxisAlignment.center,
-//                children: <Widget>[
-//                  Container(
-//                    height: 10,
-//                    width: 4,
-//                    decoration: BoxDecoration(
-//                        borderRadius:
-//                            BorderRadius.vertical(bottom: Radius.circular(8)),
-//                        color: Colors.black26),
-//                  ),
-//                  SizedBox(
-//                    height: 4,
-//                  ),
-//                  CircleAvatar(
-//                    child: Center(
-//                      child: Text(listPost[1].toString()),
-//                    ),
-//                  ),
-//                  SizedBox(
-//                    height: 4,
-//                  ),
-//                  Container(
-//                    height: 10,
-//                    width: 4,
-//                    decoration: BoxDecoration(
-//                        borderRadius:
-//                            BorderRadius.vertical(top: Radius.circular(8)),
-//                        color: Colors.black26),
-//                  )
-//                ],
-//              ),
-//            ],
-//          ),
-//          // Widget circle avatar for end
-//          Row(
-//            children: <Widget>[
-//              Column(
-//                mainAxisAlignment: MainAxisAlignment.center,
-//                children: <Widget>[
-//                  Container(
-//                    height: 10,
-//                    width: 4,
-//                    decoration: BoxDecoration(
-//                        borderRadius:
-//                            BorderRadius.vertical(bottom: Radius.circular(8)),
-//                        color: Colors.black26),
-//                  ),
-//                  SizedBox(
-//                    height: 4,
-//                  ),
-//                  CircleAvatar(
-//                    child: Center(
-//                      child: Text(listPost[2].toString()),
-//                    ),
-//                  ),
-//                ],
-//              ),
-//            ],
-//          )
-//        ],
-//      );
     }
+  }
+
+  expandedPostWidget() {
+    return Row(
+      children: <Widget>[
+        Flex(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              height: 100,
+              width: 4,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                  color: Colors.black26),
+            )
+          ],
+        ),
+        Flex(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[Text('This is description for post muntain')],
+        ),
+      ],
+    );
   }
 }
