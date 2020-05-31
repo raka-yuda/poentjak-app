@@ -280,13 +280,20 @@ class CardMountDetail extends StatelessWidget {
   }
 
   Widget postMountainWidget({List<int> listPost}) {
+    bool isExpanded = false;
     if (listPost.length == 1) {
       return ListView.builder(
           itemCount: listPost.length,
           itemBuilder: (BuildContext ctxt, int index) {
             return GestureDetector(
               onTap: () {
-                expandedPostWidget();
+                if (isExpanded == false) {
+                  isExpanded = true;
+                  expandedPostWidget(isExpanded: isExpanded);
+                } else {
+                  isExpanded = false;
+                  expandedPostWidget(isExpanded: isExpanded);
+                }
               },
               child: Row(
                 children: <Widget>[
@@ -403,26 +410,25 @@ class CardMountDetail extends StatelessWidget {
     }
   }
 
-  expandedPostWidget() {
-    return Row(
-      children: <Widget>[
-        Flex(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              height: 100,
-              width: 4,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-                  color: Colors.black26),
-            )
-          ],
-        ),
-        Flex(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[Text('This is description for post muntain')],
-        ),
-      ],
-    );
+  Widget expandedPostWidget({bool isExpanded}) {
+    if (isExpanded == false) {
+      return Row(
+        children: <Widget>[
+          Container(
+            height: 100,
+            width: 4,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                color: Colors.black26),
+          ),
+          Flex(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[Text('This is description for post muntain')],
+          ),
+        ],
+      );
+    } else {
+      return Container();
+    }
   }
 }
