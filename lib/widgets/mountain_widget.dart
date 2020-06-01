@@ -149,11 +149,21 @@ class CardMountain extends StatelessWidget {
   }
 }
 
-class CardMountDetail extends StatelessWidget {
+class CardMountDetail extends StatefulWidget {
   final Mountain _mountain;
-  final List<int> listPost = [1, 2, 3, 4];
 
   CardMountDetail(this._mountain);
+
+  @override
+  _CardMountDetailState createState() => _CardMountDetailState();
+}
+
+class _CardMountDetailState extends State<CardMountDetail> {
+  final List<int> listPost = [
+    1,
+    2,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,7 +173,7 @@ class CardMountDetail extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.46,
             width: MediaQuery.of(context).size.width,
             child: Hero(
-              tag: "mount_" * _mountain.id,
+              tag: "mount_" * widget._mountain.id,
               child: Stack(
                 children: <Widget>[
                   Container(
@@ -174,7 +184,7 @@ class CardMountDetail extends StatelessWidget {
                             bottomRight: Radius.circular(12),
                             bottomLeft: Radius.circular(12)),
                         image: DecorationImage(
-                            image: NetworkImage(_mountain.imgMt),
+                            image: NetworkImage(widget._mountain.imgMt),
                             fit: BoxFit.cover)),
                   ),
                   Positioned(
@@ -201,7 +211,7 @@ class CardMountDetail extends StatelessWidget {
                                 Material(
                                   color: Colors.transparent,
                                   child: Text(
-                                    _mountain.nameMt,
+                                    widget._mountain.nameMt,
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w900,
@@ -214,7 +224,7 @@ class CardMountDetail extends StatelessWidget {
                                 ),
                                 Material(
                                   color: Colors.transparent,
-                                  child: Text(_mountain.location,
+                                  child: Text(widget._mountain.location,
                                       style: TextStyle(
                                           color: Colors.black54,
                                           fontSize: 14,
@@ -269,7 +279,6 @@ class CardMountDetail extends StatelessWidget {
         Container(
             height: MediaQuery.of(context).size.height * 0.5,
             margin: EdgeInsets.symmetric(horizontal: 24),
-            padding: EdgeInsets.symmetric(horizontal: 36, vertical: 24),
             decoration: BoxDecoration(
               borderRadius: new BorderRadius.all(Radius.circular(12)),
               color: Colors.white,
@@ -283,123 +292,207 @@ class CardMountDetail extends StatelessWidget {
     bool isExpanded = false;
     if (listPost.length == 1) {
       return ListView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 36, vertical: 24),
           itemCount: listPost.length,
           itemBuilder: (BuildContext ctxt, int index) {
             return GestureDetector(
               onTap: () {
-                if (isExpanded == false) {
-                  isExpanded = true;
-                  expandedPostWidget(isExpanded: isExpanded);
-                } else {
-                  isExpanded = false;
-                  expandedPostWidget(isExpanded: isExpanded);
-                }
+//                if (isExpanded == false) {
+//                  setState(() {
+//                    isExpanded = true;
+//                  });
+//                } else {
+//                  setState(() {
+//                    isExpanded = false;
+//                  });
+//                }
+                print('Post tapped');
               },
-              child: Row(
+              child: Column(
                 children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      CircleAvatar(
-                        child: Center(
-                          child: Text(listPost[index].toString()),
-                        ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          CircleAvatar(
+                            child: Center(
+                              child: Text(listPost[index].toString()),
+                            ),
+                          ),
+                        ],
                       ),
+                      SizedBox(
+                        width: 12,
+                      ),
+                      Expanded(
+                        child: Text('Post ' + listPost[index].toString()),
+                      ),
+//                  (isExpanded == true)
+//                      ? Icon(Icons.keyboard_arrow_up)
+//                      : Icon(Icons.keyboard_arrow_down),
                     ],
                   ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      SizedBox(
+                        width: 52,
+                      ),
+                      Expanded(
+                        child: Text(
+                            'The best-known citizen of the Indian hill town of Darjeeling, '
+                            'Tenzing Norkay'
+                            'His presence reflects the change that has taken place in his affairs since May 29th of last year,'
+                            ' when he and Edmund Hillary stood on the summit of Mount Everest. '),
+                      ),
+//                  (isExpanded == true)
+//                      ? Icon(Icons.keyboard_arrow_up)
+//                      : Icon(Icons.keyboard_arrow_down),
+                    ],
+                  )
                 ],
               ),
             );
           });
     } else {
       return ListView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 36, vertical: 24),
           itemCount: listPost.length,
           itemBuilder: (BuildContext ctxt, int index) {
+            // First widget of post list
             if (index == listPost.first - 1) {
-              return Row(
+              return Column(
                 children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Row(
                     children: <Widget>[
-                      CircleAvatar(
-                        child: Center(
-                          child: Text(listPost[index].toString()),
-                        ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          CircleAvatar(
+                            child: Center(
+                              child: Text(listPost[index].toString()),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Container(
+                            height: 10,
+                            width: 4,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(8)),
+                                color: Colors.black26),
+                          )
+                        ],
                       ),
                       SizedBox(
-                        height: 4,
+                        width: 12,
                       ),
+                      Expanded(
+                        child: Text('Post ' + listPost[index].toString()),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
                       Container(
-                        height: 10,
+                        margin: EdgeInsets.symmetric(horizontal: 18),
+                        height: 106,
                         width: 4,
                         decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(8)),
+//                                borderRadius: BorderRadius.vertical(
+//                                    top: Radius.circular(8)),
                             color: Colors.black26),
-                      )
+                      ),
+                      Expanded(
+                        child: Text(
+                            'The best-known citizen of the Indian hill town of Darjeeling, '
+                            'Tenzing Norkay'
+                            'His presence reflects the change that has taken place in his affairs since May 29th of last year,'
+                            ' when he and Edmund Hillary stood on the summit of Mount Everest. '),
+                      ),
+                    ],
+                  )
+                ],
+              );
+            }
+            // Last widget of post list
+            else if (index == listPost.last - 1) {
+              return Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            height: 10,
+                            width: 4,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.vertical(
+                                    bottom: Radius.circular(8)),
+                                color: Colors.black26),
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          CircleAvatar(
+                            child: Center(
+                              child: Text(listPost[index].toString()),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ],
               );
-            } else if (index == listPost.last - 1) {
-              return Row(
+            }
+            // Middle widget of post list
+            else {
+              return Column(
                 children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Row(
                     children: <Widget>[
-                      Container(
-                        height: 10,
-                        width: 4,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.vertical(
-                                bottom: Radius.circular(8)),
-                            color: Colors.black26),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            height: 10,
+                            width: 4,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.vertical(
+                                    bottom: Radius.circular(8)),
+                                color: Colors.black26),
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          CircleAvatar(
+                            child: Center(
+                              child: Text(listPost[index].toString()),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          Container(
+                            height: 10,
+                            width: 4,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(8)),
+                                color: Colors.black26),
+                          )
+                        ],
                       ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      CircleAvatar(
-                        child: Center(
-                          child: Text(listPost[index].toString()),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            } else {
-              return Row(
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        height: 10,
-                        width: 4,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.vertical(
-                                bottom: Radius.circular(8)),
-                            color: Colors.black26),
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      CircleAvatar(
-                        child: Center(
-                          child: Text(listPost[index].toString()),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Container(
-                        height: 10,
-                        width: 4,
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(8)),
-                            color: Colors.black26),
-                      )
                     ],
                   ),
                 ],
