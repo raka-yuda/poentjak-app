@@ -109,20 +109,26 @@ class ArticleWidget extends StatelessWidget {
                             0.0,
                             1.0
                           ])),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 24, left: 24),
+                                child: Material(
+                      color: Colors.transparent,
+                      child: Text(
+                        _article.titleArticle,
+                        style: TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  decoration: TextDecoration.none),
+                      ),
                     ),
-                    Align(
-                        alignment: Alignment(-0.48, 0.64),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: Text(
-                            _article.titleArticle,
-                            style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                decoration: TextDecoration.none),
+                              ),
+                            ],
                           ),
-                        )),
+                    ),
                     Positioned.fill(
                         child: new Material(
                             color: Colors.transparent,
