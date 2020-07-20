@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:test_app/api/api_services.dart';
 import 'package:test_app/assets/colors.dart';
