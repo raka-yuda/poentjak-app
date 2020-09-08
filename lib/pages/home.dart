@@ -84,6 +84,12 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _mountainBloc.close();
+  }
+
   Widget customNavigationBarItem(IconData icon, int index, String route) {
     return GestureDetector(
       onTap: () {
@@ -145,20 +151,28 @@ class _HomePageState extends State<HomePage> {
 class WidgetMountain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(child:
-        BlocBuilder<MountainBloc, MountainState>(builder: (context, state) {
-      if (state is MountainLoading) {
-        return WidgetCircularLoading();
-      } else if (state is MountainFailure) {
-        return Center(
-          child: Text('${state.errorMessage}'),
-        );
-      } else if (state is MountainLoaded) {
-        Mountains mountains = state.mountains;
-        Mountain mountain = mountains.mountains[0];
-        return Text(mountain.nameMt);
-      }
-    }));
+    return Container(
+        height: MediaQuery.of(context).size.height * 0.2,
+        child:
+            BlocBuilder<MountainBloc, MountainState>(builder: (context, state) {
+          if (state is MountainLoading) {
+            return WidgetCircularLoading();
+          } else if (state is MountainFailure) {
+            return Center(
+              child: Text('${state.errorMessage}'),
+            );
+          } else if (state is MountainLoaded) {
+            List<Mountain> mountains = state.mountain;
+            return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: mountains.length,
+                itemBuilder: (BuildContext ctxt, int index) {
+                  return CardMountain(
+                    mountain: mountains[index],
+                  );
+                });
+          }
+        }));
   }
 }
 
@@ -173,20 +187,20 @@ class WidgetCircularLoading extends StatelessWidget {
   }
 }
 
-class SplashScreen extends StatelessWidget {
+class CardMountain extends StatelessWidget {
+  Mountain mountain;
+
+  CardMountain({this.mountain});
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      color: Colors.blueAccent[100],
-      child: Center(
-        child: Container(
-          child: Icon(
-            Icons.home,
-            color: Colors.white,
-          ),
-        ),
+      child: Column(
+        children: [
+          Text(mountain.id.toString()),
+          Text(mountain.nameMt.toString()),
+          Text(mountain.location.toString()),
+        ],
       ),
     );
   }

@@ -2,26 +2,26 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'mountains.g.dart';
 
-@JsonSerializable()
-class Mountains {
-  List<Mountain> mountains;
-  @JsonKey(ignore: true)
-  String error;
+// @JsonSerializable()
+// class Mountains {
+//   List<Mountain> mountains;
+//   @JsonKey(ignore: true)
+//   String error;
 
-  Mountains(this.mountains);
+//   Mountains(this.mountains);
 
-  factory Mountains.fromJson(Map<String, dynamic> json) =>
-      _$MountainsFromJson(json);
+//   factory Mountains.fromJson(Map<String, dynamic> json) =>
+//       _$MountainsFromJson(json);
 
-  Mountains.withError(this.error);
+//   Mountains.withError(this.error);
 
-  Map<String, dynamic> toJson() => _$MountainsToJson(this);
+//   Map<String, dynamic> toJson() => _$MountainsToJson(this);
 
-  @override
-  String toString() {
-    return 'Mountains{mountains: $mountains}';
-  }
-}
+//   @override
+//   String toString() {
+//     return 'Mountains{mountains: $mountains}';
+//   }
+// }
 
 @JsonSerializable()
 class Mountain {
@@ -38,12 +38,22 @@ class Mountain {
   @JsonKey(name: "post_mountain")
   List<PostMountain> postMountain;
 
+  @JsonKey(ignore: true)
+  String error;
+
+  Mountain.withError(this.error);
+
   Mountain(
-      {this.id, this.nameMt, this.imgMt, this.location, this.imageMountain});
+      {this.id,
+      this.nameMt,
+      this.imgMt,
+      this.location,
+      this.imageMountain,
+      this.postMountain});
 
   @override
   String toString() {
-    return 'Mountain{id :$id, nameMt :$nameMt ,imgMt :$imgMt ,location :$location ,imageMountain :$imageMountain , postMountain : $postMountain}';
+    return 'Mountain{id :$id, name_mt :$nameMt ,img_mt :$imgMt ,location :$location ,image_mountain :$imageMountain , post_mountain : $postMountain}';
   }
 
   factory Mountain.fromJson(Map<String, dynamic> json) =>
@@ -65,7 +75,7 @@ class ImageMountain {
 
   @override
   String toString() {
-    return 'ImageMountain{id :$id ,imgMt :$imgMt ,idMountain : $idMt}';
+    return 'ImageMountain{id :$id ,img_mt :$imgMt ,id_mountain : $idMt}';
   }
 
   factory ImageMountain.fromJson(Map<String, dynamic> json) =>
@@ -89,7 +99,7 @@ class PostMountain {
 
   @override
   String toString() {
-    return 'PostMountain{id :$id ,postName :$postName , description: $description ,idMountain : $idMt}';
+    return 'PostMountain{id :$id ,post_name :$postName , description: $description ,id_mountain : $idMt}';
   }
 
   factory PostMountain.fromJson(Map<String, dynamic> json) =>
