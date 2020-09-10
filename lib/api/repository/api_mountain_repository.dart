@@ -4,6 +4,6 @@ import '../provider/api_mountain_provider.dart';
 class ApiMountainRepository {
   final ApiMountainProvider _apiMountainProvider = ApiMountainProvider();
 
-  Future<List<Mountain>> fetchMountains() =>
+  Future<Mountains> fetchMountains() =>
       _apiMountainProvider.getMountains();
 }

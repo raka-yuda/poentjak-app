@@ -16,9 +16,9 @@ class MountainFailure extends MountainState {
 }
 
 class MountainLoaded extends MountainState {
-  final List<Mountain> mountain;
+  final Mountains mountains;
 
-  MountainLoaded(this.mountain);
+  MountainLoaded(this.mountains);
 }
 
 class MountainEvent {}
@@ -32,11 +32,11 @@ class MountainBloc extends Bloc<MountainEvent, MountainState> {
   @override
   Stream<MountainState> mapEventToState(MountainEvent event) async* {
     yield MountainLoading();
-    List<Mountain> mountain = await _apiMountainRepository.fetchMountains();
-    if (mountain[0].error != null) {
-      yield MountainFailure(mountain.toString());
+    Mountains mountains = await _apiMountainRepository.fetchMountains();
+    if (mountains.error != null) {
+      yield MountainFailure(mountains.toString());
       return;
     }
-    yield MountainLoaded(mountain);
+    yield MountainLoaded(mountains);
   }
 }

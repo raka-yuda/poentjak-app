@@ -162,15 +162,16 @@ class WidgetMountain extends StatelessWidget {
               child: Text('${state.errorMessage}'),
             );
           } else if (state is MountainLoaded) {
-            List<Mountain> mountains = state.mountain;
+            Mountains mountains = state.mountains;
             return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: mountains.length,
+                itemCount: mountains.listMountains.length,
                 itemBuilder: (BuildContext ctxt, int index) {
                   return CardMountain(
-                    mountain: mountains[index],
+                    mountain: mountains.listMountains[index],
                   );
                 });
+            // return Text(mountains.toString());
           }
         }));
   }

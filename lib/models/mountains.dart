@@ -2,26 +2,27 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'mountains.g.dart';
 
-// @JsonSerializable()
-// class Mountains {
-//   List<Mountain> mountains;
-//   @JsonKey(ignore: true)
-//   String error;
+@JsonSerializable()
+class Mountains {
+  @JsonKey(name: "mountains")
+  List<Mountain> listMountains;
+  @JsonKey(ignore: true)
+  String error;
 
-//   Mountains(this.mountains);
+  Mountains(this.listMountains);
 
-//   factory Mountains.fromJson(Map<String, dynamic> json) =>
-//       _$MountainsFromJson(json);
+  factory Mountains.fromJson(Map<String, dynamic> json) =>
+      _$MountainsFromJson(json);
 
-//   Mountains.withError(this.error);
+  Mountains.withError(this.error);
 
-//   Map<String, dynamic> toJson() => _$MountainsToJson(this);
+  Map<String, dynamic> toJson() => _$MountainsToJson(this);
 
-//   @override
-//   String toString() {
-//     return 'Mountains{mountains: $mountains}';
-//   }
-// }
+  @override
+  String toString() {
+    return 'Mountains{mountains: $listMountains}';
+  }
+}
 
 @JsonSerializable()
 class Mountain {
@@ -38,10 +39,6 @@ class Mountain {
   @JsonKey(name: "post_mountain")
   List<PostMountain> postMountain;
 
-  @JsonKey(ignore: true)
-  String error;
-
-  Mountain.withError(this.error);
 
   Mountain(
       {this.id,
