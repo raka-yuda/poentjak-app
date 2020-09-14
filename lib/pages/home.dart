@@ -1,6 +1,11 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-import '../main.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_app/models/mountains.dart';
+
+import '../bloc/mountain_bloc.dart';
 import '../widgets/main_widget.dart';
 import '../widgets/article_widget.dart';
 import '../widgets/mountain_widget.dart';
@@ -24,6 +29,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedItemIndex = 0;
+  final MountainBloc _mountainBloc = MountainBloc();
+
+  void initState() {
+    _mountainBloc.add(MountainEvent());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,15 +69,25 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        body: ListView(
-          scrollDirection: Axis.vertical,
-          children: <Widget>[
-            titleSection('Unique Facts'),
-            ArticleCarousel(),
-            titleSection('Arround You'),
-            ListMount(),
-          ],
+        body: BlocProvider<MountainBloc>(
+          create: (context) => _mountainBloc,
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            children: <Widget>[
+              titleSection('Unique Facts'),
+              ArticleCarousel(),
+              titleSection('Arround You'),
+              WidgetMountain(),
+              // ListMount(),
+            ],
+          ),
         ));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _mountainBloc.close();
   }
 
   Widget customNavigationBarItem(IconData icon, int index, String route) {
@@ -127,20 +148,60 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class SplashScreen extends StatelessWidget {
+class WidgetMountain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      color: Colors.blueAccent[100],
-      child: Center(
-        child: Container(
-          child: Icon(
-            Icons.home,
-            color: Colors.white,
-          ),
-        ),
+        height: MediaQuery.of(context).size.height * 0.2,
+        child:
+            BlocBuilder<MountainBloc, MountainState>(builder: (context, state) {
+          if (state is MountainLoading) {
+            return WidgetCircularLoading();
+          } else if (state is MountainFailure) {
+            return Center(
+              child: Text('${state.errorMessage}'),
+            );
+          } else if (state is MountainLoaded) {
+            Mountains mountains = state.mountains;
+            return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: mountains.listMountains.length,
+                itemBuilder: (BuildContext ctxt, int index) {
+                  return CardMountain(
+                    mountain: mountains.listMountains[index],
+                  );
+                });
+            // return Text(mountains.toString());
+          }
+        }));
+  }
+}
+
+class WidgetCircularLoading extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Platform.isIOS
+          ? CupertinoActivityIndicator()
+          : CircularProgressIndicator(),
+    );
+  }
+}
+
+class CardMountain extends StatelessWidget {
+  Mountain mountain;
+
+  CardMountain({this.mountain});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Text(mountain.id.toString()),
+          Text(mountain.nameMt.toString()),
+          Text(mountain.location.toString()),
+        ],
       ),
     );
   }
