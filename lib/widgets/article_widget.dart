@@ -1,16 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_app/models/articles.dart';
+import '../bloc/article_bloc.dart';
 
-import 'package:test_app/api/api_services.dart';
 import 'package:test_app/assets/colors.dart';
-import 'package:test_app/models/article.dart';
 
 //Remove all html tags for displaying preview article
 
 class ArticleCarousel extends StatefulWidget {
-  ArticleCarousel() : super();
-
   final String title = "Carousel Demo";
 
   @override
@@ -18,129 +19,150 @@ class ArticleCarousel extends StatefulWidget {
 }
 
 class ArticleCarouselState extends State<ArticleCarousel> {
-  CarouselSlider carouselSlider;
-  //  int _current = 0;
-  ApiService apiService;
+  final ArticleBloc _articleBloc = ArticleBloc();
 
   void initState() {
+    _articleBloc.add(ArticleEvent());
     super.initState();
-    apiService = ApiService();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.2,
-      // margin: EdgeInsets.only(top: 32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          FutureBuilder<List<Article>>(
-              future: apiService.getArticles(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return carouselSlider = CarouselSlider(
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    initialPage: 0,
-                    enlargeCenterPage: true,
-                    autoPlay: true,
-                    reverse: false,
-                    enableInfiniteScroll: true,
-                    autoPlayInterval: Duration(seconds: 2),
-                    autoPlayAnimationDuration: Duration(milliseconds: 2000),
-                    pauseAutoPlayOnTouch: Duration(seconds: 10),
-                    scrollDirection: Axis.horizontal,
-//                    onPageChanged: (index) {
-//                      setState(() {
-//                        _current = index;
-//                      });
-//                    },
-                    items: snapshot.data
-                        .map((article) => ArticleWidget(article))
-                        .toList(),
-                  );
-                }
-                return Container(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }),
-        ],
-      ),
-      // Article()
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.20,
+      child: BlocProvider<ArticleBloc>(
+          create: (context) => _articleBloc,
+          child:
+              BlocBuilder<ArticleBloc, ArticleState>(builder: (context, state) {
+            if (state is ArticleLoading) {
+              return WidgetCircularLoading();
+            } else if (state is ArticleFailure) {
+              return Center(
+                child: Text('${state.errorMessage}'),
+              );
+            } else if (state is ArticleLoaded) {
+              Articles articles = state.articles;
+              print(articles);
+              return ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: articles.listArticles.length,
+                  itemBuilder: (BuildContext ctxt, int index) {
+                    Article article = articles.listArticles[index];
+                    // print(article);
+                    return ArticleTile(article);
+                    // return Text(article.article);
+                  });
+              // return Text(articles.listArticles[0].toString());
+              // return carouselSlider = CarouselSlider(
+              //   height: MediaQuery.of(context).size.height * 0.2,
+              //   initialPage: 0,
+              //   enlargeCenterPage: true,
+              //   autoPlay: true,
+              //   reverse: false,
+              //   enableInfiniteScroll: true,
+              //   autoPlayInterval: Duration(seconds: 2),
+              //   autoPlayAnimationDuration: Duration(milliseconds: 2000),
+              //   pauseAutoPlayOnTouch: Duration(seconds: 10),
+              //   scrollDirection: Axis.horizontal,
+              //   items: articles.listArticles
+              //       .map((article) => ArticleTile(article))
+              //       .toList(),
+              // );
+            } else {
+              return Container();
+            }
+          })),
     );
   }
 }
 
-class ArticleWidget extends StatelessWidget {
-  final Article _article;
+class Carousel extends StatelessWidget {
+  final List<Article> articles;
 
-  ArticleWidget(this._article);
+  Carousel(this.articles);
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (BuildContext context) {
-        // print(url);
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.symmetric(horizontal: 10.0),
-          child: Hero(
-              tag: "article_" * _article.id,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Stack(fit: StackFit.expand, children: <Widget>[
-                    Image.network(_article.imgArticle, fit: BoxFit.cover),
-                    Container(
-                      decoration: BoxDecoration(
-                          // color: Colors.white,
-                          gradient: LinearGradient(
-                              begin: FractionalOffset.center,
-                              end: FractionalOffset.bottomCenter,
-                              colors: [
-                            Color(0x00000000),
-                            darkBlue.withOpacity(1),
-                          ],
-                              stops: [
-                            0.0,
-                            1.0
-                          ])),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 24, left: 24),
-                                child: Material(
-                      color: Colors.transparent,
-                      child: Text(
-                        _article.titleArticle,
-                        style: TextStyle(
-                                  fontSize: 22,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  decoration: TextDecoration.none),
-                      ),
-                    ),
-                              ),
-                            ],
+    return CarouselSlider(
+        height: MediaQuery.of(context).size.height * 0.2,
+        initialPage: 0,
+        enlargeCenterPage: true,
+        autoPlay: true,
+        reverse: false,
+        enableInfiniteScroll: true,
+        autoPlayInterval: Duration(seconds: 2),
+        autoPlayAnimationDuration: Duration(milliseconds: 2000),
+        pauseAutoPlayOnTouch: Duration(seconds: 10),
+        scrollDirection: Axis.horizontal,
+        items: articles.map((article) => ArticleTile(article)).toList());
+  }
+}
+
+class ArticleTile extends StatelessWidget {
+  final Article _article;
+
+  ArticleTile(this._article);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 64,
+      height: MediaQuery.of(context).size.height * 0.18 - 128,
+      margin: EdgeInsets.symmetric(horizontal: 8.0),
+      child: Hero(
+          tag: "article_" * _article.id,
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: Stack(fit: StackFit.expand, children: <Widget>[
+                Image.network(_article.imgArticle, fit: BoxFit.cover),
+                Container(
+                  decoration: BoxDecoration(
+                      // color: Colors.white,
+                      gradient: LinearGradient(
+                          begin: FractionalOffset.center,
+                          end: FractionalOffset.bottomCenter,
+                          colors: [
+                        Color(0x00000000),
+                        darkBlue.withOpacity(1),
+                      ],
+                          stops: [
+                        0.0,
+                        1.0
+                      ])),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 24, left: 24),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Text(
+                            _article.titleArticle,
+                            style: TextStyle(
+                                fontSize: 22,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                decoration: TextDecoration.none),
                           ),
-                    ),
-                    Positioned.fill(
-                        child: new Material(
-                            color: Colors.transparent,
-                            child: new InkWell(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ArticleWidgetDetail(_article))),
-                            )))
-                  ]))),
-        );
-      },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned.fill(
+                    child: new Material(
+                        color: Colors.transparent,
+                        child: new InkWell(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ArticleWidgetDetail(_article))),
+                        )))
+              ]))),
     );
   }
 }
@@ -281,6 +303,18 @@ class _ArticleWidgetDetailState extends State<ArticleWidgetDetail> {
           borderRadius: BorderRadius.circular(15), color: Colors.white),
       child: Text(
           article.length > 100 ? '${article.substring(0, 100)}...' : article),
+    );
+  }
+}
+
+//Loading Widget
+class WidgetCircularLoading extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Platform.isIOS
+          ? CupertinoActivityIndicator()
+          : CircularProgressIndicator(),
     );
   }
 }

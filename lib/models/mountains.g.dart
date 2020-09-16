@@ -16,7 +16,7 @@ Mountains _$MountainsFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$MountainsToJson(Mountains instance) => <String, dynamic>{
-      'mountains': instance.mountains,
+      'mountains': instance.listMountains,
     };
 
 Mountain _$MountainFromJson(Map<String, dynamic> json) {
@@ -30,10 +30,11 @@ Mountain _$MountainFromJson(Map<String, dynamic> json) {
             ? null
             : ImageMountain.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-  )..postMountain = (json['post_mountain'] as List)
-      ?.map((e) =>
-          e == null ? null : PostMountain.fromJson(e as Map<String, dynamic>))
-      ?.toList();
+    postMountain: (json['post_mountain'] as List)
+        ?.map((e) =>
+            e == null ? null : PostMountain.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
 }
 
 Map<String, dynamic> _$MountainToJson(Mountain instance) => <String, dynamic>{

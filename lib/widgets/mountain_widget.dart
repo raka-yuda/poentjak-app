@@ -1,49 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:test_app/api/api_services.dart';
 import 'package:test_app/assets/colors.dart';
-import 'package:test_app/models/mountain.dart';
-
-class ListMount extends StatefulWidget {
-  @override
-  _ListMountState createState() => _ListMountState();
-}
-
-class _ListMountState extends State<ListMount> {
-  ApiService apiService;
-
-  void initState() {
-    super.initState();
-    apiService = ApiService();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 280.0,
-        alignment: Alignment.center,
-        child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 0, 10, 20),
-            child: FutureBuilder<List<Mountain>>(
-                future: apiService.getMountains(),
-                builder: (context, snapshot) {
-                  return (snapshot.hasData)
-                      ? ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (context, index) {
-                            Mountain mountain = snapshot.data[index];
-                            return CardMountain(mountain);
-                          })
-                      : Container(
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                })));
-  }
-}
+import 'package:test_app/models/mountains.dart';
 
 class CardMountain extends StatelessWidget {
   final Mountain _mountain;
@@ -57,77 +16,111 @@ class CardMountain extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           Container(
-              width: MediaQuery.of(context).size.width * 0.56,
-              height: MediaQuery.of(context).size.height * 0.36,
+            width: MediaQuery.of(context).size.width * 0.46,
+            height: MediaQuery.of(context).size.height * 0.3,
+            margin: EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: FractionalOffset.center,
+                  end: FractionalOffset.bottomCenter,
+                  colors: [
+                    Color(0x00000000),
+                    darkBlue.withOpacity(1),
+                  ],
+                  stops: [
+                    0.0,
+                    1.0
+                  ]),
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              image: DecorationImage(
+                image: NetworkImage(_mountain.imgMt),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Container(
+              width: MediaQuery.of(context).size.width * 0.46,
+              height: MediaQuery.of(context).size.height * 0.3,
               margin: EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                image: DecorationImage(
-                  image: NetworkImage(_mountain.imgMt),
-                  fit: BoxFit.cover,
-                ),
+                gradient: LinearGradient(
+                    begin: FractionalOffset.center,
+                    end: FractionalOffset.bottomCenter,
+                    colors: [
+                      Color(0x00000000),
+                      darkBlue.withOpacity(1),
+                    ],
+                    stops: [
+                      0.0,
+                      1.0
+                    ]),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
               ),
               child: Stack(
                 children: <Widget>[
                   Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 16),
-                          width: double.maxFinite,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0)),
-                              color: shadeBlue.withOpacity(0.84)),
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: Text(
-                                      _mountain.nameMt,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w900,
-                                          color: Colors.white,
-                                          decoration: TextDecoration.none),
-                                    ),
-                                  ),
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Text(
+                                  _mountain.nameMt,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.white,
+                                      decoration: TextDecoration.none),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.all(2.5),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: Text(
-                                      _mountain.location,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(2.5),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Expanded(
+                                  child: Row(children: [
+                                    Image(
+                                      image: AssetImage(
+                                          'lib/assets/images/gps.png'),
+                                      width: 14,
+                                    ),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      _mountain.location.split(',')[0],
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.white54,
                                           decoration: TextDecoration.none),
                                     ),
-                                  ),
+                                  ]),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.all(2.5),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: Text(
-                                      "-",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                          decoration: TextDecoration.none),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ))
+                            Padding(
+                              padding: EdgeInsets.all(2.5),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Text(
+                                  "2125 masl",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      decoration: TextDecoration.none),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                   Positioned.fill(
