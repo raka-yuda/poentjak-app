@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:test_app/assets/colors.dart';
+import 'package:test_app/assets/style.dart';
 import 'package:test_app/models/mountains.dart';
 
 class CardMountain extends StatelessWidget {
@@ -128,11 +128,13 @@ class CardMountain extends StatelessWidget {
                           color: Colors.transparent,
                           child: new InkWell(
                             borderRadius: BorderRadius.circular(12),
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CardMountDetail(_mountain))),
+                            onTap: () => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          CardMountDetail(_mountain))),
+                            },
                           )))
                 ],
               ))

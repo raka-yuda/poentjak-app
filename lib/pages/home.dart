@@ -3,13 +3,15 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_app/bloc/list_save_bloc.dart';
 import 'package:test_app/models/mountains.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 import '../bloc/mountain_bloc.dart';
 import '../widgets/article_widget.dart';
 import '../widgets/mountain_widget.dart';
-import '../assets/colors.dart';
+import '../assets/style.dart';
+import 'package:test_app/models/articles.dart';
 
 class Home extends StatefulWidget {
   static const String id = 'home';
@@ -90,13 +92,18 @@ class HomePage extends StatelessWidget {
     return ListView(
       scrollDirection: Axis.vertical,
       children: <Widget>[
-        TitleSection(title: 'Discover'),
+        TitleSection(
+          title: 'Discover',
+          lengthBg: 88,
+        ),
         // TextFormField(),
         SearchInput(),
         WidgetMountain(),
-        TitleSection(title: 'Travel Blog'),
+        TitleSection(
+          title: 'Travel Blog',
+          lengthBg: 116,
+        ),
         ArticleCarousel(),
-
         // ListMount(),
       ],
     );
@@ -217,8 +224,9 @@ class _CustomNavigationBarItemState extends State<CustomNavigationBarItem> {
 
 class TitleSection extends StatelessWidget {
   final String title;
+  final double lengthBg;
 
-  TitleSection({this.title});
+  TitleSection({this.title, this.lengthBg});
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +236,7 @@ class TitleSection extends StatelessWidget {
         Container(
           margin: EdgeInsets.only(top: 18, left: 4),
           height: 10,
-          width: 112,
+          width: lengthBg,
           color: shadeBlue,
         ),
         Text(
@@ -288,12 +296,6 @@ class _WidgetMountainState extends State<WidgetMountain> {
               }
             })));
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _mountainBloc.close();
-  }
 }
 
 //Loading Widget
@@ -311,10 +313,56 @@ class Loading extends StatelessWidget {
 class SavePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text('Save Page'),
-      ),
+    final ListSaveBloc _listSaveBloc = BlocProvider.of<ListSaveBloc>(context);
+    return ListView(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TitleSection(
+              title: "Save Item",
+              lengthBg: 100,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              padding: EdgeInsets.only(left: 16, right: 16),
+              child: BlocBuilder<ListSaveBloc, ListSaveState>(
+                bloc: _listSaveBloc,
+                builder: (context, state) {
+                  if (state is ListSaveInitial) {
+                    return Text('Result: -');
+                  } else if (state is ListSaveFailed) {
+                    return Text('Waiting ....');
+                  } else if (state is ListSaveSuccess) {
+                    // print(state.listSaveArticle);
+                    List<Article> listSaveArticle = state.listSaveArticle;
+                    return Expanded(
+                      child: ListView.builder(
+                        // separatorBuilder: (BuildContext context, int index) =>
+                        //     Divider(),
+                        scrollDirection: Axis.vertical,
+                        itemCount: listSaveArticle.length,
+                        itemBuilder: (BuildContext ctxt, int index) {
+                          Article article = state.listSaveArticle[index];
+                          return Container(
+                              // width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.18,
+                              child: ArticleTile(article));
+                          // return Center(
+                          //     child: Text(listSaveArticle[index].titleArticle));
+                        },
+                      ),
+                    );
+                  } else {
+                    return Text('You have nothing in here $state');
+                  }
+                },
+              ),
+            ),
+          ],
+        )
+      ],
     );
   }
 }
@@ -323,8 +371,20 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(
-        child: Text('Profile Page'),
+      padding: EdgeInsets.only(top: 28),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TitleSection(
+            title: "Profile Page",
+            lengthBg: 100,
+          ),
+          Flexible(
+            child: Center(
+              child: Text("Profile Page"),
+            ),
+          )
+        ],
       ),
     );
   }

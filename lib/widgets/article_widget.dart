@@ -4,12 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_app/bloc/list_save_bloc.dart';
 import 'package:test_app/models/articles.dart';
 import '../bloc/article_bloc.dart';
 
-import 'package:test_app/assets/colors.dart';
-
-//Remove all html tags for displaying preview article
+import 'package:test_app/assets/style.dart';
 
 class ArticleCarousel extends StatefulWidget {
   final String title = "Carousel Demo";
@@ -20,6 +19,7 @@ class ArticleCarousel extends StatefulWidget {
 
 class ArticleCarouselState extends State<ArticleCarousel> {
   final ArticleBloc _articleBloc = ArticleBloc();
+  List<Article> listSaveItem;
 
   void initState() {
     _articleBloc.add(ArticleEvent());
@@ -43,7 +43,6 @@ class ArticleCarouselState extends State<ArticleCarousel> {
               );
             } else if (state is ArticleLoaded) {
               Articles articles = state.articles;
-              print(articles);
               return ListView.builder(
                   shrinkWrap: true,
                   padding: EdgeInsets.symmetric(horizontal: 16),
@@ -55,49 +54,11 @@ class ArticleCarouselState extends State<ArticleCarousel> {
                     return ArticleTile(article);
                     // return Text(article.article);
                   });
-              // return Text(articles.listArticles[0].toString());
-              // return carouselSlider = CarouselSlider(
-              //   height: MediaQuery.of(context).size.height * 0.2,
-              //   initialPage: 0,
-              //   enlargeCenterPage: true,
-              //   autoPlay: true,
-              //   reverse: false,
-              //   enableInfiniteScroll: true,
-              //   autoPlayInterval: Duration(seconds: 2),
-              //   autoPlayAnimationDuration: Duration(milliseconds: 2000),
-              //   pauseAutoPlayOnTouch: Duration(seconds: 10),
-              //   scrollDirection: Axis.horizontal,
-              //   items: articles.listArticles
-              //       .map((article) => ArticleTile(article))
-              //       .toList(),
-              // );
             } else {
               return Container();
             }
           })),
     );
-  }
-}
-
-class Carousel extends StatelessWidget {
-  final List<Article> articles;
-
-  Carousel(this.articles);
-
-  @override
-  Widget build(BuildContext context) {
-    return CarouselSlider(
-        height: MediaQuery.of(context).size.height * 0.2,
-        initialPage: 0,
-        enlargeCenterPage: true,
-        autoPlay: true,
-        reverse: false,
-        enableInfiniteScroll: true,
-        autoPlayInterval: Duration(seconds: 2),
-        autoPlayAnimationDuration: Duration(milliseconds: 2000),
-        pauseAutoPlayOnTouch: Duration(seconds: 10),
-        scrollDirection: Axis.horizontal,
-        items: articles.map((article) => ArticleTile(article)).toList());
   }
 }
 
@@ -108,6 +69,13 @@ class ArticleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ListSaveBloc _listSaveBloc = BlocProvider.of<ListSaveBloc>(context);
+
+    void saveArticle(Operation operation) {
+      Article article = _article;
+      _listSaveBloc.add(ListSaveEvent(operation, article));
+    }
+
     return Container(
       width: MediaQuery.of(context).size.width - 64,
       height: MediaQuery.of(context).size.height * 0.18 - 128,
@@ -120,7 +88,6 @@ class ArticleTile extends StatelessWidget {
                 Image.network(_article.imgArticle, fit: BoxFit.cover),
                 Container(
                   decoration: BoxDecoration(
-                      // color: Colors.white,
                       gradient: LinearGradient(
                           begin: FractionalOffset.center,
                           end: FractionalOffset.bottomCenter,
@@ -155,15 +122,61 @@ class ArticleTile extends StatelessWidget {
                 Positioned.fill(
                     child: new Material(
                         color: Colors.transparent,
-                        child: new InkWell(
-                          onTap: () => Navigator.push(
+                        child: new InkWell(onTap: () {
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      ArticleWidgetDetail(_article))),
-                        )))
+                                      ArticleWidgetDetail(_article)));
+                        }))),
+                BlocProvider<ListSaveBloc>(
+                    create: (context) => _listSaveBloc,
+                    child: BlocBuilder<ListSaveBloc, ListSaveState>(
+                        bloc: _listSaveBloc,
+                        builder: (context, state) {
+                          return Positioned(
+                            top: -8,
+                            right: 6,
+                            child: GestureDetector(
+                              onTap: () {
+                                saveArticle(Operation.add);
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                        '"${_article.titleArticle}" added to save item')));
+                                // print(state);
+                              },
+                              child: Icon(
+                                Icons.bookmark_border,
+                                size: 36,
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+                        })),
               ]))),
     );
+  }
+}
+
+class Carousel extends StatelessWidget {
+  final List<Article> articles;
+
+  Carousel(this.articles);
+
+  @override
+  Widget build(BuildContext context) {
+    return CarouselSlider(
+        height: MediaQuery.of(context).size.height * 0.2,
+        initialPage: 0,
+        enlargeCenterPage: true,
+        autoPlay: true,
+        reverse: false,
+        enableInfiniteScroll: true,
+        autoPlayInterval: Duration(seconds: 2),
+        autoPlayAnimationDuration: Duration(milliseconds: 2000),
+        pauseAutoPlayOnTouch: Duration(seconds: 10),
+        scrollDirection: Axis.horizontal,
+        items: articles.map((article) => ArticleTile(article)).toList());
   }
 }
 
