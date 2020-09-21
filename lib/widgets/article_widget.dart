@@ -10,31 +10,16 @@ import '../bloc/article_bloc.dart';
 
 import 'package:test_app/assets/style.dart';
 
-class ArticleCarousel extends StatefulWidget {
-  final String title = "Carousel Demo";
-
-  @override
-  ArticleCarouselState createState() => ArticleCarouselState();
-}
-
-class ArticleCarouselState extends State<ArticleCarousel> {
-  final ArticleBloc _articleBloc = ArticleBloc();
-  List<Article> listSaveItem;
-
-  void initState() {
-    _articleBloc.add(ArticleEvent());
-    super.initState();
-  }
-
+class ArticleCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ArticleBloc _articleBloc = BlocProvider.of<ArticleBloc>(context);
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.20,
-      child: BlocProvider<ArticleBloc>(
-          create: (context) => _articleBloc,
-          child:
-              BlocBuilder<ArticleBloc, ArticleState>(builder: (context, state) {
+      child: BlocBuilder<ArticleBloc, ArticleState>(
+          bloc: _articleBloc,
+          builder: (context, state) {
             if (state is ArticleLoading) {
               return WidgetCircularLoading();
             } else if (state is ArticleFailure) {
@@ -51,21 +36,24 @@ class ArticleCarouselState extends State<ArticleCarousel> {
                   itemBuilder: (BuildContext ctxt, int index) {
                     Article article = articles.listArticles[index];
                     // print(article);
-                    return ArticleTile(article);
+                    return ArticleTile(article, false);
                     // return Text(article.article);
                   });
             } else {
-              return Container();
+              return Container(
+                child: Text(state.toString()),
+              );
             }
-          })),
+          }),
     );
   }
 }
 
 class ArticleTile extends StatelessWidget {
   final Article _article;
+  bool isSaved = false;
 
-  ArticleTile(this._article);
+  ArticleTile(this._article, this.isSaved);
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +134,9 @@ class ArticleTile extends StatelessWidget {
                                 // print(state);
                               },
                               child: Icon(
-                                Icons.bookmark_border,
+                                (isSaved == true)
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border,
                                 size: 36,
                                 color: Colors.white,
                               ),
@@ -176,7 +166,7 @@ class Carousel extends StatelessWidget {
         autoPlayAnimationDuration: Duration(milliseconds: 2000),
         pauseAutoPlayOnTouch: Duration(seconds: 10),
         scrollDirection: Axis.horizontal,
-        items: articles.map((article) => ArticleTile(article)).toList());
+        items: articles.map((article) => ArticleTile(article, false)).toList());
   }
 }
 

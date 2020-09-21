@@ -127,7 +127,7 @@ class CardMountain extends StatelessWidget {
                       child: new Material(
                           color: Colors.transparent,
                           child: new InkWell(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(8),
                             onTap: () => {
                               Navigator.push(
                                   context,

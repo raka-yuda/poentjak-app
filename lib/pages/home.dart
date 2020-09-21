@@ -3,15 +3,16 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_app/bloc/list_save_bloc.dart';
 import 'package:test_app/models/mountains.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:test_app/pages/profile.dart';
+import 'package:test_app/pages/save.dart';
+import 'package:test_app/pages/search.dart';
 
 import '../bloc/mountain_bloc.dart';
 import '../widgets/article_widget.dart';
 import '../widgets/mountain_widget.dart';
 import '../assets/style.dart';
-import 'package:test_app/models/articles.dart';
 
 class Home extends StatefulWidget {
   static const String id = 'home';
@@ -113,112 +114,65 @@ class HomePage extends StatelessWidget {
 class SearchInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 24, right: 24, bottom: 18),
-      padding: EdgeInsets.all(8),
-      width: MediaQuery.of(context).size.width,
-      height: 56,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8), color: shadeBlue),
-      child: Row(
-        children: [
-          Flexible(
-            child: TextFormField(
-              autofocus: false,
-              decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  labelText: 'Where do you wanna go?',
-                  contentPadding: const EdgeInsets.all(20.0)),
-              onSaved: (String value) {
-                // This optional block of code can be used to run
-                // code when the user saves the form.
-              },
-              validator: (String value) {
-                return value.contains('@') ? 'Do not use the @ char.' : null;
-              },
-            ),
-          ),
-          Container(
-            height: 40,
-            width: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
-            ),
-            child: Center(
-              child: Icon(
-                Icons.search,
-                color: Colors.grey,
-                size: 24,
+    return Row(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(right: 24, left: 24, bottom: 18),
+            child: Container(
+              height: 56,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8), color: shadeBlue),
+              child: Stack(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          enabled: false,
+                          autofocus: false,
+                          decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              labelStyle: TextStyle(color: Colors.white),
+                              labelText: 'Where do you wanna go?',
+                              contentPadding: const EdgeInsets.all(20.0)),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
+                          validator: (String value) {
+                            return value.contains('@')
+                                ? 'Do not use the @ char.'
+                                : null;
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: 12),
+                        child: Icon(
+                          Icons.search,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                      )
+                    ],
+                  ),
+                  Positioned.fill(
+                      child: new Material(
+                          color: Colors.transparent,
+                          child: new InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              onTap: () {
+                                Navigator.pushNamed(context, SearchPage.id);
+                              })))
+                ],
               ),
             ),
-          )
-        ],
-      ),
+          ),
+        ),
+      ],
     );
-  }
-}
-
-class CustomNavigationBarItem extends StatefulWidget {
-  final IconData icon;
-  final int index;
-  final String route;
-  CustomNavigationBarItem(this.icon, this.index, this.route);
-
-  @override
-  _CustomNavigationBarItemState createState() =>
-      _CustomNavigationBarItemState();
-}
-
-class _CustomNavigationBarItemState extends State<CustomNavigationBarItem> {
-  int _selectedItemIndex = 0;
-
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedItemIndex = widget.index;
-        });
-        Navigator.pushNamed(context, widget.route);
-      },
-      child: Container(
-          height: 48,
-          width: MediaQuery.of(context).size.width / 3,
-          child: (widget.index == _selectedItemIndex)
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(widget.icon, color: Colors.blueAccent[600]),
-                    SizedBox(
-                      height: 2,
-                    ),
-                    Container(
-                      width: 12,
-                      height: 8,
-                      decoration: BoxDecoration(
-                          color: Colors.blueAccent[100],
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                    )
-                  ],
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                      Icon(widget.icon, color: Colors.blueAccent[100])
-                    ])),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }
 
@@ -306,86 +260,6 @@ class Loading extends StatelessWidget {
       child: Platform.isIOS
           ? CupertinoActivityIndicator()
           : CircularProgressIndicator(),
-    );
-  }
-}
-
-class SavePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final ListSaveBloc _listSaveBloc = BlocProvider.of<ListSaveBloc>(context);
-    return ListView(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TitleSection(
-              title: "Save Item",
-              lengthBg: 100,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              padding: EdgeInsets.only(left: 16, right: 16),
-              child: BlocBuilder<ListSaveBloc, ListSaveState>(
-                bloc: _listSaveBloc,
-                builder: (context, state) {
-                  if (state is ListSaveInitial) {
-                    return Text('Result: -');
-                  } else if (state is ListSaveFailed) {
-                    return Text('Waiting ....');
-                  } else if (state is ListSaveSuccess) {
-                    // print(state.listSaveArticle);
-                    List<Article> listSaveArticle = state.listSaveArticle;
-                    return Expanded(
-                      child: ListView.builder(
-                        // separatorBuilder: (BuildContext context, int index) =>
-                        //     Divider(),
-                        scrollDirection: Axis.vertical,
-                        itemCount: listSaveArticle.length,
-                        itemBuilder: (BuildContext ctxt, int index) {
-                          Article article = state.listSaveArticle[index];
-                          return Container(
-                              // width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 0.18,
-                              child: ArticleTile(article));
-                          // return Center(
-                          //     child: Text(listSaveArticle[index].titleArticle));
-                        },
-                      ),
-                    );
-                  } else {
-                    return Text('You have nothing in here $state');
-                  }
-                },
-              ),
-            ),
-          ],
-        )
-      ],
-    );
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 28),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TitleSection(
-            title: "Profile Page",
-            lengthBg: 100,
-          ),
-          Flexible(
-            child: Center(
-              child: Text("Profile Page"),
-            ),
-          )
-        ],
-      ),
     );
   }
 }

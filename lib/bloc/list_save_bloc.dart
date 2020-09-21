@@ -26,21 +26,37 @@ class ListSaveEvent {
   ListSaveEvent(this.operation, this.article);
 }
 
+class ListSaveRepository {
+  List<Article> _listSaveArticle = [];
+
+  void saveItem(Article article) {
+    _listSaveArticle.add(article);
+  }
+
+  void deleteItem(Article article) {
+    _listSaveArticle.remove(article);
+  }
+
+  List<Article> getListSave() {
+    return _listSaveArticle;
+  }
+}
+
 class ListSaveBloc extends Bloc<ListSaveEvent, ListSaveState> {
   @override
   ListSaveState get initialState => ListSaveInitial();
 
   @override
   Stream<ListSaveState> mapEventToState(ListSaveEvent event) async* {
-    List<Article> listSaveArticle = [];
+    ListSaveRepository listSaveRepository = ListSaveRepository();
     switch (event.operation) {
       case Operation.add:
-        listSaveArticle.add(event.article);
-        yield ListSaveSuccess(listSaveArticle);
+        listSaveRepository.saveItem(event.article);
+        yield ListSaveSuccess(listSaveRepository.getListSave());
         break;
       case Operation.delete:
-        listSaveArticle.remove(event.article);
-        yield ListSaveSuccess(listSaveArticle);
+        listSaveRepository.deleteItem(event.article);
+        yield ListSaveSuccess(listSaveRepository.getListSave());
         break;
       default:
         yield ListSaveFailed('Unknown operation');
