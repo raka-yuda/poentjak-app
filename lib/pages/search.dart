@@ -14,7 +14,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List<String> listArticle = List<String>();
+  List<Article> listArticle = List<Article>();
   @override
   Widget build(BuildContext context) {
     final ArticleBloc _articleBloc = BlocProvider.of<ArticleBloc>(context);
@@ -67,8 +67,12 @@ class _SearchPageState extends State<SearchPage> {
                           itemCount: articles.listArticles.length,
                           itemBuilder: (context, index) {
                             Article article = articles.listArticles[index];
-                            if (!listArticle.contains(article.titleArticle)) {
-                              listArticle.add(article.titleArticle);
+                            listArticle.add(article);
+                            if (!listArticle[index]
+                                    .titleArticle
+                                    .contains(article.titleArticle) &&
+                                listArticle != []) {
+                              listArticle.add(article);
                             }
                             return ListTile(
                               title: Text(article.titleArticle),
@@ -85,9 +89,9 @@ class _SearchPageState extends State<SearchPage> {
 }
 
 class Search extends SearchDelegate {
-  final List<String> listItem;
-  List<String> recentList = ['The holiday', 'Plane Accident'];
-  String selectedItem;
+  final List<Article> listItem;
+  List<Article> recentList = [];
+  Article selectedItem;
 
   Search(this.listItem);
 
@@ -119,25 +123,32 @@ class Search extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text(selectedItem),
-      ),
+    return ListView(
+      children: [
+        Container(
+          padding: EdgeInsets.only(left: 12, right: 12, top: 24),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.24,
+          child: Expanded(
+            child: ArticleTile(selectedItem, false),
+          ),
+        )
+      ],
     );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> suggestionList = [];
+    List<Article> suggestionList = [];
     query.isEmpty
         ? suggestionList = recentList
-        : suggestionList
-            .addAll(listItem.where((element) => element.contains(query)));
+        : suggestionList.addAll(
+            listItem.where((element) => element.titleArticle.contains(query)));
     return ListView.builder(
         itemCount: suggestionList.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(suggestionList[index]),
+            title: Text(suggestionList[index].titleArticle),
             onTap: () {
               selectedItem = suggestionList[index];
               showResults(context);
