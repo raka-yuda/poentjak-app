@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_app/api/repository/api_mountain_repository.dart';
 import 'package:test_app/models/mountains.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:test_app/pages/profile.dart';
@@ -213,7 +214,7 @@ class WidgetMountain extends StatefulWidget {
 }
 
 class _WidgetMountainState extends State<WidgetMountain> {
-  final MountainBloc _mountainBloc = MountainBloc();
+  final MountainBloc _mountainBloc = MountainBloc(apiMountainRepository: ApiMountainRepository());
 
   void initState() {
     _mountainBloc.add(MountainEvent());

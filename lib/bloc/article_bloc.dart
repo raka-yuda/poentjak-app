@@ -24,15 +24,17 @@ class ArticleLoaded extends ArticleState {
 class ArticleEvent {}
 
 class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
-  final ApiArticleRepository _apiArticleRepository = ApiArticleRepository();
+  final ApiArticleRepository apiArticleRepository;
 
-  @override
-  ArticleState get initialState => ArticleInitial();
+  ArticleBloc({this.apiArticleRepository}) : super(ArticleInitial());
+
+  // @override
+  // ArticleState get initialState => ArticleInitial();
 
   @override
   Stream<ArticleState> mapEventToState(ArticleEvent event) async* {
     yield ArticleLoading();
-    Articles articles = await _apiArticleRepository.fetchArticles();
+    Articles articles = await apiArticleRepository.fetchArticles();
     if (articles.error != null) {
       yield ArticleFailure(articles.toString());
       return;

@@ -43,8 +43,10 @@ class ListSaveRepository {
 }
 
 class ListSaveBloc extends Bloc<ListSaveEvent, ListSaveState> {
-  @override
-  ListSaveState get initialState => ListSaveInitial();
+  ListSaveBloc({ListSaveState initialState}) : super(ListSaveInitial());
+
+  // @override
+  // ListSaveState get initialState => ListSaveInitial();
 
   @override
   Stream<ListSaveState> mapEventToState(ListSaveEvent event) async* {

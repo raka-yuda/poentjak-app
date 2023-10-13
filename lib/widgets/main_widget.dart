@@ -1,6 +1,9 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoding/geocoding.dart';
 
 import '../assets/style.dart';
 
@@ -36,10 +39,12 @@ class GpsPill extends StatefulWidget {
 }
 
 class _GpsPillState extends State<GpsPill> {
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  // final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
   Position _currentPosition;
   String _currentAddress = "Current Address";
+
+  String tempString = "";
 
   @override
   Widget build(BuildContext context) {
@@ -85,41 +90,73 @@ class _GpsPillState extends State<GpsPill> {
             child: new Material(
                 color: Colors.transparent,
                 child: new InkWell(onTap: () {
-                  _getCurrentLocation();
+                  // _getCurrentLocation();
                 }))),
       ],
     );
     // Text(_currentPosition.toString())
   }
 
-  _getCurrentLocation() {
-    geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      setState(() {
-        _currentPosition = position;
-      });
+  // _getCurrentLocation() {
+  //   geolocator
+  //       .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+  //       .then((Position position) {
+  //     setState(() {
+  //       _currentPosition = position;
+  //     });
 
-      _getAddressFromLatLng();
-    }).catchError((e) {
-      print(e);
-    });
+  //     _getAddressFromLatLng();
+  //   }).catchError((e) {
+  //     print(e);
+  //   });
+  // }
+
+  // _getAddressFromLatLng() async {
+  //   try {
+  //     List<Placemark> p = await geolocator.placemarkFromCoordinates(
+  //         _currentPosition.latitude, _currentPosition.longitude);
+
+  //     Placemark place = p[0];
+
+  //     setState(() {
+  //       _currentAddress =
+  //           "${place.locality.toString()}, ${place.postalCode.toString()}, ${place.country.toString()}";
+  //     });
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
+  Future<void> _getCurrentPosition() async {
+    // verify permissions
+    LocationPermission permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      await Geolocator.openAppSettings();
+      await Geolocator.openLocationSettings();
+    }
+    // get current position
+    _currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    // get address
+    String _currentAddress = await _getGeolocationAddress(_currentPosition);
   }
 
-  _getAddressFromLatLng() async {
-    try {
-      List<Placemark> p = await geolocator.placemarkFromCoordinates(
-          _currentPosition.latitude, _currentPosition.longitude);
+  // Method to get Address from position:
 
-      Placemark place = p[0];
-
-      setState(() {
-        _currentAddress =
-            "${place.locality.toString()}, ${place.postalCode.toString()}, ${place.country.toString()}";
-      });
-    } catch (e) {
-      print(e);
+  Future<String> _getGeolocationAddress(Position position) async {
+    // geocoding
+    var places = await placemarkFromCoordinates(
+      position.latitude,
+      position.longitude,
+    );
+    if (places != null && places.isNotEmpty) {
+      final Placemark place = places.first;
+      return "${place.thoroughfare}, ${place.locality}";
     }
+
+    return "No address available";
   }
 }
 

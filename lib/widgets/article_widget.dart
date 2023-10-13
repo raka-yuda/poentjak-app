@@ -156,6 +156,8 @@ class Carousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
+      items: articles.map((article) => ArticleTile(article, false)).toList(),
+      options: CarouselOptions(
         height: MediaQuery.of(context).size.height * 0.2,
         initialPage: 0,
         enlargeCenterPage: true,
@@ -164,9 +166,10 @@ class Carousel extends StatelessWidget {
         enableInfiniteScroll: true,
         autoPlayInterval: Duration(seconds: 2),
         autoPlayAnimationDuration: Duration(milliseconds: 2000),
-        pauseAutoPlayOnTouch: Duration(seconds: 10),
+        pauseAutoPlayOnTouch: false,
         scrollDirection: Axis.horizontal,
-        items: articles.map((article) => ArticleTile(article, false)).toList());
+      ),
+    );
   }
 }
 

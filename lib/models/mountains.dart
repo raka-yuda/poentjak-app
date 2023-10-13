@@ -39,7 +39,6 @@ class Mountain {
   @JsonKey(name: "post_mountain")
   List<PostMountain> postMountain;
 
-
   Mountain(
       {this.id,
       this.nameMt,

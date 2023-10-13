@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../api/repository/api_mountain_repository.dart';
@@ -24,15 +25,18 @@ class MountainLoaded extends MountainState {
 class MountainEvent {}
 
 class MountainBloc extends Bloc<MountainEvent, MountainState> {
-  final ApiMountainRepository _apiMountainRepository = ApiMountainRepository();
+  final ApiMountainRepository apiMountainRepository;
 
-  @override
-  MountainState get initialState => MountainInitial();
+  // MountainBloc(MountainState initialState) : super(initialState);
+  MountainBloc({this.apiMountainRepository}) : super(MountainInitial());
+
+  // @override
+  // MountainState get initialState => MountainInitial();
 
   @override
   Stream<MountainState> mapEventToState(MountainEvent event) async* {
     yield MountainLoading();
-    Mountains mountains = await _apiMountainRepository.fetchMountains();
+    Mountains mountains = await apiMountainRepository.fetchMountains();
     if (mountains.error != null) {
       yield MountainFailure(mountains.toString());
       return;

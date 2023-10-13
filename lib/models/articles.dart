@@ -5,11 +5,11 @@ part 'articles.g.dart';
 @JsonSerializable()
 class Articles {
   @JsonKey(name: "articles")
-  List<Article> listArticles;
+  final List<Article> listArticles;
   @JsonKey(ignore: true)
-  String error;
+  String? error;
 
-  Articles(this.listArticles);
+  Articles({required this.listArticles});
 
   factory Articles.fromJson(Map<String, dynamic> json) =>
       _$ArticlesFromJson(json);
